@@ -4,6 +4,12 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
     <style name="Theme.MyProject" parent="Base.Theme.MyProject" />
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+       <item name="android:background">@null</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:backgroundTint">@color/orange</item>
+
+    </style>
+
 </resources>
