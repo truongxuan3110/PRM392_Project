@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:id="@+id/ic_cart1"
+    android:icon="@drawable/ic_cart"
+    android:title="Item1"
+    app:actionLayout="@layout/custom_cart_layout"
+    app:showAsAction="ifRoom"/>
+
+<!--    always-->
+    <item android:id="@+id/ic_search"
+        android:title="Search"
+        app:showAsAction="never"/>
+    <item android:id="@+id/ic_cart"
+        android:title="Cart"
+        app:showAsAction="never"/>
+
+</menu>
