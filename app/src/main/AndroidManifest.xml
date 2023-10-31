@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <application
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.NOTIFICATION" />
+    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />    
+  <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,6 +21,30 @@
             android:exported="false" />
         <activity
             android:name=".activity.ChatActivity"
+            android:exported="true"/>
+      <activity
+        android:name=".activity.CartActivity"
+        android:exported="false" />
+        <activity
+            android:name=".activity.BookDetailActivity"
+            android:exported="false" />
+    <activity
+        android:name=".activity.PaymentActivity"
+        android:exported="false" />
+    <activity
+        android:name=".activity.PaymentWithCreditCardActivity"
+        android:exported="false" />
+    <activity
+        android:name=".activity.Order_Address_Activity"
+        android:exported="false" />
+    <activity
+        android:name=".activity.WaitOrderActivity"
+        android:exported="false" />
+    <activity
+        android:name=".activity.Last_Payment_Activity"
+        android:exported="false" />
+        <activity
+            android:name=".activity.ListBook"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
