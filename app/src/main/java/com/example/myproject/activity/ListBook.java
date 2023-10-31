@@ -63,9 +63,17 @@ public class ListBook extends AppCompatActivity {
 
             }
         });
-        ImageView carticon, chaticon;
+        ImageView carticon, chaticon, infoicon;
         carticon = findViewById(R.id.cart_icon);
         chaticon = findViewById(R.id.chat_icon);
+        infoicon = findViewById(R.id.infor_icon);
+        infoicon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListBook.this, ContactActivity.class);
+                startActivity(intent);
+            }
+        });
         carticon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,11 +89,13 @@ public class ListBook extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
     private List<Book> performSearch(String query) {
         List<Book> searchResults = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
+         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
 
         Query searchQuery = databaseReference.orderByChild("bookTitle") // Thay "title" bằng trường bạn muốn tìm kiếm
                 .startAt(query) // Bắt đầu từ query
