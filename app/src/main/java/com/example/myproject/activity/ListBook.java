@@ -1,11 +1,13 @@
 package com.example.myproject.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -61,12 +63,39 @@ public class ListBook extends AppCompatActivity {
 
             }
         });
+        ImageView carticon, chaticon, infoicon;
+        carticon = findViewById(R.id.cart_icon);
+        chaticon = findViewById(R.id.chat_icon);
+        infoicon = findViewById(R.id.infor_icon);
+        infoicon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListBook.this, ContactActivity.class);
+                startActivity(intent);
+            }
+        });
+        carticon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  Log.d("dđ","d");
+                Intent intent = new Intent(ListBook.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+        chaticon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListBook.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
     private List<Book> performSearch(String query) {
         List<Book> searchResults = new ArrayList<>();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
+         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
 
         Query searchQuery = databaseReference.orderByChild("bookTitle") // Thay "title" bằng trường bạn muốn tìm kiếm
                 .startAt(query) // Bắt đầu từ query
@@ -120,23 +149,23 @@ public class ListBook extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.ic_cart) {
-            Toast.makeText(this, "Cart", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.ic_search) {
-            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int itemId = item.getItemId();
+//        if (itemId == R.id.ic_cart) {
+//            Toast.makeText(this, "Cart", Toast.LENGTH_SHORT).show();
+//            return true;
+//        } else if (itemId == R.id.ic_search) {
+//            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+//            return true;
+//        } else
+//            return super.onOptionsItemSelected(item);
+//    }
 }
