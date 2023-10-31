@@ -2,9 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.NOTIFICATION" />
-    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />    <application
+    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />
+
+    <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,35 +22,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyProject"
         tools:targetApi="33">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/my_map_api_key" />
+
         <activity
-            android:name=".activity.ChatActivity"
-            android:exported="false" />
+            android:name=".activity.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps">
+        </activity>
+
+
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="false" />
-      <activity
-        android:name=".activity.CartActivity"
-        android:exported="false" />
-        <activity
-            android:name=".activity.BookDetailActivity"
-            android:exported="false" />
-    <activity
-        android:name=".activity.PaymentActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activity.PaymentWithCreditCardActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activity.Order_Address_Activity"
-        android:exported="false" />
-    <activity
-        android:name=".activity.WaitOrderActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activity.Last_Payment_Activity"
-        android:exported="false" />
-        <activity
-            android:name=".activity.ListBook"
+            android:name=".activity.ContactActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +54,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.BookDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PaymentWithCreditCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.Order_Address_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WaitOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.Last_Payment_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ListBook"
+            android:exported="false"></activity>
     </application>
 
 </manifest>
