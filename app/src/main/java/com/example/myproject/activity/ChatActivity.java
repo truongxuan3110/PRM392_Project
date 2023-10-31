@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -49,6 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseFirestore db;
     ChatAdapter adapter;
     List<ChatMessage> list;
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,16 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         initView();
         initControl();
+        insertUser();
+    }
+
+    private void insertUser() {
+        HashMap<String,Object> user = new HashMap<>();
+        user.put("id", "2");
+//        user.put("id", Utils.user_current.getId());
+        user.put("username", "truong");
+//        user.put("username", Utils.user_current.getUsername());
+        db.collection("users").document(String.valueOf(2)).set(user);
     }
 
     private void initControl() {
@@ -73,8 +86,8 @@ public class ChatActivity extends AppCompatActivity {
 
         } else {
             HashMap<String, Object> message = new HashMap<>();
-            message.put(Utils.SENDID, 2); //message.put(Utils.SENDID,String.valueOf(Utils.user_current.getId())); //lấy Id người gửi
-            message.put(Utils.RECEIVEDID, 1); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
+            message.put(Utils.SENDID, "2"); //message.put(Utils.SENDID,String.valueOf(Utils.user_current.getId())); //lấy Id người gửi
+            message.put(Utils.RECEIVEDID, "1"); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
             message.put(Utils.MESS, str_mes);
             message.put(Utils.DATETIME, new Date());
 
@@ -128,20 +141,25 @@ public class ChatActivity extends AppCompatActivity {
                             // Xử lý lỗi
                             return;
                         }
-
+                        int count = list.size();
                         list.clear(); // Xóa danh sách tin nhắn hiện tại
                         for (QueryDocumentSnapshot document : value) {
                             ChatMessage chatMessage = new ChatMessage();
-                                chatMessage.sendid = document.getLong(Utils.SENDID).toString();
-                                chatMessage.receivedid = document.getLong(Utils.RECEIVEDID).toString();
+                                chatMessage.sendid = document.getString(Utils.SENDID);
+                                chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
                                 chatMessage.mess = document.getString(Utils.MESS);
                                 chatMessage.dateObj = document.getDate(Utils.DATETIME);
                                 chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
                                 list.add(chatMessage);
                         }
 
-                        adapter.notifyDataSetChanged(); // Cập nhật RecyclerView
-                        recyclerView.smoothScrollToPosition(list.size()-1);
+                        Collections.sort(list,(obj1,obj2)-> obj1.dateObj.compareTo(obj2.dateObj));
+                        if (count==0){
+                            adapter.notifyDataSetChanged();
+                        }else {
+                            adapter.notifyItemRangeInserted(list.size(),list.size());
+                            recyclerView.smoothScrollToPosition(list.size()-1);
+                        }
                     }
                 });
     }
