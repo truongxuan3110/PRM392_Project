@@ -4,43 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/orange"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:title="Giỏ hàng">
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="260dp">
-
-            <ImageView
-                android:id="@+id/cart_icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_cart" />
-            <TextView
-                android:id="@+id/cart_count"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@drawable/badge_background"
-                android:gravity="center"
-                android:text="0"
-                android:textSize="10dp"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-
-
-
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/toolbar"/>
 
 
     <LinearLayout
