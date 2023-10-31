@@ -10,9 +10,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.NOTIFICATION" />
-    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />
-
-    <application
+    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />  
+  <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -43,26 +42,19 @@
             android:exported="false"
             android:label="@string/title_activity_maps">
         </activity>
-
-
         <activity
             android:name=".activity.ContactActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
-            android:name=".activity.ChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.UserChatActivity"
             android:exported="false" />
         <activity
             android:name=".activity.CartActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="true"/>
         <activity
             android:name=".activity.BookDetailActivity"
             android:exported="false" />
@@ -83,7 +75,16 @@
             android:exported="false" />
         <activity
             android:name=".activity.ListBook"
-            android:exported="false"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

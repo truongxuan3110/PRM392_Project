@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -87,6 +88,8 @@ public class BookDetailActivity extends AppCompatActivity {
         TextView priceTextView = findViewById(R.id.detail_text_view_price);
         TextView quanityTextView = findViewById(R.id.detail_text_view_quanity);
         TextView desTextView = findViewById(R.id.detail_text_view_desciption);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Chi tiet san pham");
 
        // descriptionImageView.setImageResource(productImageResource);
         nameTextView.setText(productName);

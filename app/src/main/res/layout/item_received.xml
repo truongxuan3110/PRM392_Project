@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
-        android:id="@+id/txtmess"
+        android:id="@+id/txtmessreceived"
         android:padding="10dp"
         android:text="Noi dung chat"
         android:textColor="@color/black"
@@ -16,7 +16,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"/>
     <TextView
-        app:layout_constraintTop_toBottomOf="@+id/txtmess"
+        android:id="@+id/txttimereceived"
+        app:layout_constraintTop_toBottomOf="@+id/txtmessreceived"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Thoi gian"
         android:layout_marginTop="10dp"
