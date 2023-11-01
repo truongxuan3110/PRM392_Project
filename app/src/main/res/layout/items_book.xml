@@ -48,7 +48,7 @@
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:contentDescription="Add to Cart"
-            android:src="@drawable/add_to_cart" />
+            android:src="@drawable/common_full_open_on_phone" />
 
 
     </LinearLayout>

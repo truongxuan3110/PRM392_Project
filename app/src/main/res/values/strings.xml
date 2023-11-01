@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">MyProject</string>
+    <string name="app_name">Shopee</string>
+
+    <string name="nav_title">Account</string>
+    <string name="nav_my_profile" >My profile</string>
+    <string name="nav_change_password" >Change password</string>
+    <string name="nav_signout" >Sign Out</string>
+    <string name="nav_drawer_open" >Open nav</string>
+    <string name="nav_drawer_close" >Close nav</string>
+    <string name="nav_location" >Location</string>
+    <string name="nav_cart" >Cart</string>
+
 </resources>
