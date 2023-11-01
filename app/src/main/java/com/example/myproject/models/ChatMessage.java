@@ -3,8 +3,16 @@ package com.example.myproject.models;
 import java.util.Date;
 
 public class ChatMessage {
-    public String sendid, receivedid, mess, datetime;
+    public String sendid, receivedid, mess, datetime, participantid;
     public Date dateObj;
+
+    public String getParticipantid() {
+        return participantid;
+    }
+
+    public void setParticipantid(String participantid) {
+        this.participantid = participantid;
+    }
 
     public String getSendid() {
         return sendid;
