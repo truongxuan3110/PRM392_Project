@@ -76,8 +76,6 @@ public class PaymentActivity  extends AppCompatActivity {
 
         }
 
-
-
         btn_payment = findViewById(R.id.btn_payment);
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myproject.R;
 import com.example.myproject.activity.PaymentActivity;
 import com.example.myproject.models.Cart;
@@ -45,6 +46,9 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
         if(orderDetail == null){
             return;
         }
+        Glide.with(mContext)
+                .load(orderDetail.getBook().getImg())
+                .into(holder.item_payment_image);
        // holder.item_payment_image.setImageResource(orderDetail.getBook().getImg());
         holder.item_payment_name.setText(orderDetail.getBook().getBookTitle());
         holder.item_payment_price.setText(String.valueOf(orderDetail.getBook().getPrice()));
@@ -70,7 +74,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
         private TextView item_payment_quantity;
         private TextView item_payment_totalPrice;
 
-        private TextView txtPrice;
+       // private TextView txtPrice;
 
 
         // là nơi khai báo các thành phần có trong items_product.xml

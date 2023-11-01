@@ -9,6 +9,8 @@ import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myproject.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,13 +21,13 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setupToolbar() {
        // Toolbar toolbar = findViewById(R.id.toolbar);
-
+        FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
         ImageView cartIcon = findViewById(R.id.cart_icon);
         ImageView chatIcon = findViewById(R.id.chat_icon);
         ImageView infoIcon = findViewById(R.id.infor_icon);
         ImageView backImageView = findViewById(R.id.back_button);
         TextView cartCount = findViewById(R.id.cart_count);
-        String userId = "1"; // Thay thế bằng ID của người dùng cần đếm số lượng phần tử trong "carts/userId"
+        String userId = user_current.getUid(); // Thay thế bằng ID của người dùng cần đếm số lượng phần tử trong "carts/userId"
         DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference().child("carts").child(userId);
         cartRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -48,9 +50,6 @@ public class BaseActivity extends AppCompatActivity {
                 // Xử lý lỗi nếu có
             }
         });
-
-
-
 
         cartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +81,5 @@ public class BaseActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }
