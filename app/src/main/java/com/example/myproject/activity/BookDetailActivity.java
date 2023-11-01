@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetailActivity extends BaseActivity {
     private Context mContext;
     private Cart mCart;
 
@@ -81,40 +81,42 @@ public class BookDetailActivity extends AppCompatActivity {
         String description = getIntent().getStringExtra("PRODUCT_DESCRIPTION");
 
 
-        //  Log.d("ImageDebug", "Product Image Resource: " + productImageResource);
-
         ImageView descriptionImageView = findViewById(R.id.detail_image_view);
         TextView nameTextView = findViewById(R.id.detail_text_view_name);
         TextView priceTextView = findViewById(R.id.detail_text_view_price);
         TextView quanityTextView = findViewById(R.id.detail_text_view_quanity);
         TextView desTextView = findViewById(R.id.detail_text_view_desciption);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Chi tiet san pham");
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        toolbar.setTitle("Chi tiet san pham");
+        TextView nameScreen = findViewById(R.id.nameScreen);
+        nameScreen.setText("Chi tiết sản phẩm");
 
-       // descriptionImageView.setImageResource(productImageResource);
+
+        // descriptionImageView.setImageResource(productImageResource);
         nameTextView.setText(productName);
         priceTextView.setText(String.valueOf(productPrice) + "VNĐ");
         quanityTextView.setText("Số lượng: " + String.valueOf(quantity));
         desTextView.setText(String.valueOf(description));
-        Button addtocart;
-        ImageView carticon;
-        carticon = findViewById(R.id.cart_icon);
-        carticon.setOnClickListener(new View.OnClickListener() {
+        Button addtocart, buynow;
+        setupToolbar();
+        // mua luôn
+        buynow = findViewById(R.id.buy_now);
+        buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Log.d("dđ","d");
-                Intent intent = new Intent(mContext, CartActivity.class);
-                startActivity(intent);
-
+          Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
+          startActivity(intent2);
             }
         });
 
+        // thêm vào giỏ hàng
         addtocart = findViewById(R.id.add_to_cart);
         addtocart.setOnClickListener(new View.OnClickListener() {
             private static final int NOTIFICATION_ID = 1;
 
             @Override
             public void onClick(View view) {
+                Toast.makeText(mContext, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
 
                 // if (userIsLoggedIn) {
                 // Thêm sách vào giỏ hàng trên Firebase
@@ -150,12 +152,14 @@ public class BookDetailActivity extends AppCompatActivity {
                             cartRef.child(String.valueOf(cartItemId)).setValue(cartItemData);
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Xử lý lỗi nếu cần
                     }
                 });
             }
+
             private void sendNotification() {
                 //   Toast.makeText(mContext, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, CartActivity.class);
@@ -165,7 +169,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, "1")
                         .setSmallIcon(R.drawable.mail)
                         .setContentTitle("Bạn có thông báo từ giỏ hàng!")
-                        .setContentText(productName + "đã được thêm vào giỏ hàng")
+                        .setContentText(productName + " đã được thêm vào giỏ hàng")
                         .setLargeIcon(bitmap)
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -199,7 +203,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 // Duyệt qua tất cả các bản ghi trong giỏ hàng của người dùng
                 Set<Integer> bookIds = new HashSet<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    Integer  bookId = itemSnapshot.child("bookId").getValue(Integer.class);
+                    Integer bookId = itemSnapshot.child("bookId").getValue(Integer.class);
                     bookIds.add(bookId);
                 }
 
@@ -220,7 +224,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private void updateCartIconCount(int count, ImageView cartIcon, TextView cartCount) {
         // Tùy chỉnh biểu tượng giỏ hàng để hiển thị số loại sách
         // Ví dụ: có thể sử dụng một Badge hoặc TextView để hiển thị số count
-        if (count > 0) {
+        if (count >= 0) {
             cartIcon.setVisibility(View.VISIBLE);
             cartCount.setText(String.valueOf(count));
         } else {

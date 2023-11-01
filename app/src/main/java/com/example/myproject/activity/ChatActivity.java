@@ -45,7 +45,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.SimpleFormatter;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     ImageView imgSend;
@@ -63,6 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         initToolbar();
         initControl();
         insertUser();
+        setupToolbar();
     }
     private void initToolbar() {
         setSupportActionBar(toolbar);
