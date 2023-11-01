@@ -4,19 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include layout="@layout/toolbar"/>
+
 
     <LinearLayout
         android:id="@+id/topLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="500dp"
         android:orientation="horizontal"
         android:padding="16dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.013">
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/detail_image_view"
@@ -66,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="38dp"
                 android:text="Giá bán: "
                 android:textColor="@color/red"
                 android:textSize="18sp" />
@@ -74,46 +79,40 @@
             <Button
                 android:id="@+id/add_to_cart"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:background="@color/red"
                 android:text="Thêm vào giỏ hàng" />
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="497dp"
-        android:layout_height="351dp"
-        android:layout_marginStart="16dp"
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/detail_text_view_title_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chi tiết sản phẩm"
+        android:textColor="@color/green"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.957">
+        android:layout_marginTop="40dp"
+        app:layout_constraintVertical_bias="0.644" />
 
-        <TextView
-            android:id="@+id/detail_text_view_title_des"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chi tiết sản phẩm"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="@color/green"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.104"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.566" />
-
-        <TextView
-            android:id="@+id/detail_text_view_desciption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mô tả sản phẩm"
-            tools:layout_editor_absoluteX="61dp"
-            tools:layout_editor_absoluteY="487dp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/detail_text_view_desciption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mô tả sản phẩm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.716" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

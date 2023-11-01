@@ -9,7 +9,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
-        android:padding="10dp"
         android:weightSum="10"
         android:id="@+id/line1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,16 +17,20 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/edtinputext"
-            android:layout_width="0dp"
-            android:layout_height="61dp"
             android:layout_weight="8"
+            android:id="@+id/edtinputext"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:hint="Noi dung chat"
             android:background="@drawable/back_inputtext"
-            android:hint="Noi dung chat" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/imagechat"
             android:src="@drawable/ic_send"
             android:layout_width="0dp"
+            android:layout_gravity="center"
             app:tint="@color/colortext"
             android:layout_height="wrap_content"
             android:layout_weight="2"/>
