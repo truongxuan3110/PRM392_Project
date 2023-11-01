@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,21 +88,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void showUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return;
-
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-
         if (user == null) {
+            // Người dùng chưa đăng nhập, không cần hiển thị thông tin.
             tvName.setVisibility(View.GONE);
+            tvEmail.setVisibility(View.GONE);
         } else {
-            tvName.setText(name);
-            tvEmail.setText(email);
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+
+            if (name != null && !name.isEmpty()) {
+                tvName.setText(name);
+            } else {
+                tvName.setText("Không có tên người dùng");
+            }
+
+            if (email != null && !email.isEmpty()) {
+                tvEmail.setText(email);
+            } else {
+                tvEmail.setText("Không có địa chỉ email");
+            }
         }
-
-
     }
 
 
