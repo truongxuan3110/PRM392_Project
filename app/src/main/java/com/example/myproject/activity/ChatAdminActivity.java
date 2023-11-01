@@ -1,7 +1,5 @@
 package com.example.myproject.activity;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,13 +17,10 @@ import com.example.myproject.R;
 import com.example.myproject.adapter.ChatAdapter;
 import com.example.myproject.models.ChatMessage;
 import com.example.myproject.utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,10 +36,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.logging.SimpleFormatter;
 
-public class ChatActivity extends BaseActivity {
+public class ChatAdminActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     ImageView imgSend;
@@ -54,17 +46,17 @@ public class ChatActivity extends BaseActivity {
     ChatAdapter adapter;
     List<ChatMessage> list;
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
-
+    String emailUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_admin);
+        emailUser = getIntent().getStringExtra("email");
         initView();
         initToolbar();
         initControl();
-        insertUser();
-        setupToolbar();
     }
+
     private void initToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -75,15 +67,6 @@ public class ChatActivity extends BaseActivity {
             }
         });
     }
-    private void insertUser() {
-        HashMap<String,Object> user = new HashMap<>();
-        user.put("email", user_current.getEmail());
-//        user.put("id", Utils.user_current.getId());
-//        user.put("username", "truong");
-//        user.put("username", Utils.user_current.getUsername());
-        db.collection("users").document(String.valueOf(user_current.getEmail())).set(user);
-    }
-
     private void initControl() {
         imgSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,8 +83,8 @@ public class ChatActivity extends BaseActivity {
         } else {
             HashMap<String, Object> message = new HashMap<>();
             message.put(Utils.SENDID, user_current.getEmail()); //message.put(Utils.SENDID,String.valueOf(Utils.user_current.getId())); //lấy Id người gửi
-            message.put(Utils.RECEIVEDID, Utils.EMAIL_AD); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
-            message.put(Utils.PARTICIPANTID, user_current.getEmail());
+            message.put(Utils.RECEIVEDID, emailUser); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
+            message.put(Utils.PARTICIPANTID, emailUser);
             message.put(Utils.MESS, str_mes);
             message.put(Utils.DATETIME, new Date());
 
@@ -130,6 +113,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void initView() {
+
         toolbar = findViewById(R.id.toolbar);
         list = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
@@ -161,15 +145,15 @@ public class ChatActivity extends BaseActivity {
                         list.clear(); // Xóa danh sách tin nhắn hiện tại
                         for (QueryDocumentSnapshot document : value) {
                             ChatMessage chatMessage = new ChatMessage();
-                                chatMessage.sendid = document.getString(Utils.SENDID);
-                                chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
-                                chatMessage.mess = document.getString(Utils.MESS);
-                                chatMessage.dateObj = document.getDate(Utils.DATETIME);
-                                chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
-                                list.add(chatMessage);
+                            chatMessage.sendid = document.getString(Utils.SENDID);
+                            chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
+                            chatMessage.mess = document.getString(Utils.MESS);
+                            chatMessage.dateObj = document.getDate(Utils.DATETIME);
+                            chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
+                            list.add(chatMessage);
                         }
 
-                        Collections.sort(list,(obj1,obj2)-> obj1.dateObj.compareTo(obj2.dateObj));
+                        Collections.sort(list,(obj1, obj2)-> obj1.dateObj.compareTo(obj2.dateObj));
                         if (count==0){
                             adapter.notifyDataSetChanged();
                         }else {

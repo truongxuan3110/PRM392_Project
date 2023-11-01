@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myproject.R;
 import com.example.myproject.adapter.BookAdapter;
 import com.example.myproject.models.Book;
+import com.example.myproject.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +37,7 @@ public class ListBook extends BaseActivity {
     private RecyclerView mRecyclerBook;
     private BookAdapter mBookAdapter;
     private List<Book> productList;
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +67,6 @@ public class ListBook extends BaseActivity {
 
             }
         });
-
-
-
     }
 
     private List<Book> performSearch(String query) {
