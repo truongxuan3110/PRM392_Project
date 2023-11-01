@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myproject.R;
 import com.example.myproject.adapter.BookAdapter;
 import com.example.myproject.models.Book;
+import com.example.myproject.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +37,7 @@ public class ListBook extends AppCompatActivity {
     private RecyclerView mRecyclerBook;
     private BookAdapter mBookAdapter;
     private List<Book> productList;
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +89,14 @@ public class ListBook extends AppCompatActivity {
         chaticon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListBook.this, ChatActivity.class);
-                startActivity(intent);
+                if(user_current.getEmail().equals(Utils.EMAIL_AD)){
+                    Intent intent = new Intent(ListBook.this, UserChatActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(ListBook.this, ChatActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

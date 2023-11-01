@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ChatActivity">
-
+    tools:context=".activity.ChatAdminActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         app:title="Chat"
@@ -51,5 +50,4 @@
         app:layout_constraintBottom_toTopOf="@id/line1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
