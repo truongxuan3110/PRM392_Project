@@ -60,21 +60,21 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initView();
-        initToolbar();
+       // initToolbar();
         initControl();
         insertUser();
         setupToolbar();
     }
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+//    private void initToolbar() {
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//    }
     private void insertUser() {
         HashMap<String,Object> user = new HashMap<>();
         user.put("email", user_current.getEmail());
