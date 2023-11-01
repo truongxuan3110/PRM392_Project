@@ -22,6 +22,8 @@ import com.example.myproject.adapter.CartAdapter;
 import com.example.myproject.models.Book;
 import com.example.myproject.models.Cart;
 import com.example.myproject.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ public class CartActivity extends BaseActivity {
    // private List<Cart> mCartProducts;
    TextView totalpriceTextView ;
     private double totalPrice; // Biến để lưu giá trị tổng giá
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
    // Bắt sự kiện thanh toán
    Button btn_Buy;
@@ -61,7 +64,7 @@ public class CartActivity extends BaseActivity {
                 totalpriceTextView.setText(String.valueOf(totalPrice));
             }
         });
-        getCartProducts("1"); // fix cứng userID
+        getCartProducts(user_current.getUid()); // fix cứng userID
         // Sự kiện thanh toán
         btn_Buy = findViewById(R.id.btn_buy);
         btn_Buy.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +108,7 @@ public class CartActivity extends BaseActivity {
                         @Override
                         public void onCallback(Book book) {
                             if (book != null) {
-                                Cart cartItem = new Cart("1", quantity, book);
+                                Cart cartItem = new Cart(user_current.getUid(), quantity, book);
                                 cartProducts.add(cartItem);
                                 mCartAdapter.setData(cartProducts);
                                 mRecyclerProduct.setAdapter(mCartAdapter);

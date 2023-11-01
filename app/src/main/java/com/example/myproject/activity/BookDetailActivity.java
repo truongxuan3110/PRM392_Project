@@ -29,9 +29,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.myproject.R;
 import com.example.myproject.models.Cart;
 import com.example.myproject.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +48,7 @@ import java.util.Set;
 public class BookDetailActivity extends BaseActivity {
     private Context mContext;
     private Cart mCart;
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +56,8 @@ public class BookDetailActivity extends BaseActivity {
         //setHasOptionsMenu(true);
         setContentView(R.layout.book_detail);
         mContext = this; // Khởi tạo mContext ở đây
-        countCartItems("1");
+        countCartItems(user_current.getUid());
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel notificationChannel =
-//                    new NotificationChannel("1", "CHANNEL_1_ID",
-//                            NotificationManager.IMPORTANCE_HIGH);
-//            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-//            notificationManager.createNotificationChannel(notificationChannel);
-//
-//        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "CHANNEL_1_ID";
             String description = "MyChannelDescription";
@@ -73,12 +69,13 @@ public class BookDetailActivity extends BaseActivity {
             notificationManager.createNotificationChannel(channel);
         }
         Intent intent = getIntent();
-        int productId = getIntent().getIntExtra("PRODUCT_ID", 0);
+        int productId = intent.getIntExtra("PRODUCT_ID", 0);
         String productName = intent.getStringExtra("PRODUCT_NAME");
-        int productImageResource = getIntent().getIntExtra("PRODUCT_IMAGE", 0);
-        int productPrice = getIntent().getIntExtra("PRODUCT_PRICE", 0);
-        int quantity = getIntent().getIntExtra("PRODUCT_QUANTITY", 0);
-        String description = getIntent().getStringExtra("PRODUCT_DESCRIPTION");
+        String productImageResource = intent.getStringExtra("PRODUCT_IMAGE");
+        int productPrice = intent.getIntExtra("PRODUCT_PRICE", 0);
+        int quantity = intent.getIntExtra("PRODUCT_QUANTITY", 0);
+        String description = intent.getStringExtra("PRODUCT_DESCRIPTION");
+
 
 
         ImageView descriptionImageView = findViewById(R.id.detail_image_view);
@@ -97,6 +94,9 @@ public class BookDetailActivity extends BaseActivity {
         priceTextView.setText(String.valueOf(productPrice) + "VNĐ");
         quanityTextView.setText("Số lượng: " + String.valueOf(quantity));
         desTextView.setText(String.valueOf(description));
+        Glide.with(mContext)
+                .load(productImageResource)
+                .into(descriptionImageView);
         Button addtocart, buynow;
         setupToolbar();
         // mua luôn
@@ -104,8 +104,8 @@ public class BookDetailActivity extends BaseActivity {
         buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-          Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
-          startActivity(intent2);
+                Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
+                startActivity(intent2);
             }
         });
 
@@ -120,7 +120,7 @@ public class BookDetailActivity extends BaseActivity {
 
                 // if (userIsLoggedIn) {
                 // Thêm sách vào giỏ hàng trên Firebase
-                addToCart(productId, "1");
+                addToCart(productId, user_current.getUid());
 
                 //  } else {
                 // Yêu cầu người dùng đăng nhập hoặc đăng ký

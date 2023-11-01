@@ -5,39 +5,39 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content">
-    <include layout="@layout/toolbar"/>
+<!--   // <include layout="@layout/toolbar"/>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
 
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+<!--        <SearchView-->
+<!--            android:id="@+id/searchView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
 
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/orange"
-            android:iconifiedByDefault="false"
-            android:queryHint="Nhập từ khóa" />
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:backgroundTint="@color/orange"-->
+<!--            android:iconifiedByDefault="false"-->
+<!--            android:queryHint="Nhập từ khóa" />-->
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sản phẩm"
-            android:textSize="35dp"
-            android:textStyle="bold"
+<!--        <TextView-->
+<!--            android:id="@+id/textView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Sản phẩm"-->
+<!--            android:textSize="35dp"-->
+<!--            android:textStyle="bold"-->
 
-            android:layout_marginLeft="130dp"
-            />
+<!--            android:layout_marginLeft="130dp"-->
+<!--            />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_product"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rcv_product"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
 
-            android:layout_marginTop="20dp"/>
-    </LinearLayout>
+<!--            android:layout_marginTop="20dp"/>-->
+<!--    </LinearLayout>-->
 </LinearLayout>

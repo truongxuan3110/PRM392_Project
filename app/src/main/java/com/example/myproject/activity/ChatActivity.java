@@ -9,12 +9,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.myproject.R;
 import com.example.myproject.adapter.ChatAdapter;
@@ -26,6 +28,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -45,7 +52,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.SimpleFormatter;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     ImageView imgSend;
@@ -54,27 +61,70 @@ public class ChatActivity extends BaseActivity {
     ChatAdapter adapter;
     List<ChatMessage> list;
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
-
+    ImageView cartIcon , infoIcon , backImageView ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initView();
-       // initToolbar();
+        initToolbar();
         initControl();
         insertUser();
-        setupToolbar();
     }
-//    private void initToolbar() {
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//    }
+    private void initToolbar() {
+        infoIcon = findViewById(R.id.infor_icon);
+        backImageView = findViewById(R.id.back_button);
+        cartIcon = findViewById(R.id.cart_icon);
+        TextView cartCount = findViewById(R.id.cart_count);
+        String userId = user_current.getUid(); // Thay thế bằng ID của người dùng cần đếm số lượng phần tử trong "carts/userId"
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference().child("carts").child(userId);
+        cartRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    long itemCount = dataSnapshot.getChildrenCount();
+
+                    if (itemCount >= 0) {
+                        cartIcon.setVisibility(View.VISIBLE);
+                        cartCount.setText(String.valueOf(itemCount));
+                    } else {
+                        cartIcon.setVisibility(View.GONE);
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+            }
+        });
+
+        cartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        infoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatActivity.this, ContactActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+}
     private void insertUser() {
         HashMap<String,Object> user = new HashMap<>();
         user.put("email", user_current.getEmail());
