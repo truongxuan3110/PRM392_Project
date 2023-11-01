@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListBook extends AppCompatActivity {
+public class ListBook extends BaseActivity {
 
     private RecyclerView mRecyclerBook;
     private BookAdapter mBookAdapter;
@@ -41,7 +41,7 @@ public class ListBook extends AppCompatActivity {
         setContentView(R.layout.list_book);
         mRecyclerBook = findViewById(R.id.rcv_product);
         mBookAdapter = new BookAdapter(this);
-
+        setupToolbar();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
         mRecyclerBook.setLayoutManager(layoutManager);
@@ -63,32 +63,7 @@ public class ListBook extends AppCompatActivity {
 
             }
         });
-        ImageView carticon, chaticon, infoicon;
-        carticon = findViewById(R.id.cart_icon);
-        chaticon = findViewById(R.id.chat_icon);
-        infoicon = findViewById(R.id.infor_icon);
-        infoicon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ListBook.this, ContactActivity.class);
-                startActivity(intent);
-            }
-        });
-        carticon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  Log.d("dđ","d");
-                Intent intent = new Intent(ListBook.this, CartActivity.class);
-                startActivity(intent);
-            }
-        });
-        chaticon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListBook.this, ChatActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
 
     }

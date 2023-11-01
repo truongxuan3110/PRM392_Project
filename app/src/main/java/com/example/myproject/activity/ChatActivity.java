@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.SimpleFormatter;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
     RecyclerView recyclerView;
     ImageView imgSend;
     EditText edtMess;
@@ -60,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         initView();
         initControl();
         insertUser();
+        setupToolbar();
     }
 
     private void insertUser() {

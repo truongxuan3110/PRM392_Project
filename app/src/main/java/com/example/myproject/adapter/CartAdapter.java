@@ -10,14 +10,22 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproject.Interface.TotalPriceListener;
 import com.example.myproject.R;
 import com.example.myproject.models.Cart;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -53,13 +61,49 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             holder.itemcartname.setText(cart.getBook().getBookTitle());
             holder.itemcartprice.setText(String.valueOf(cart.getBook().getPrice()));
 
+//            holder.add_item.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int position = holder.getBindingAdapterPosition();
+//                    Cart cartItem = mListCart.get(position);
+//                    int qty = cartItem.getQuantity() + 1;
+//                    updateCartQty(cartItem.getBook().getBookId(), qty);
+//                }
+//            });
             holder.add_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = holder.getBindingAdapterPosition();
                     Cart cartItem = mListCart.get(position);
                     int qty = cartItem.getQuantity() + 1;
-                    updateCartQty(cartItem.getBook().getBookId(), qty);
+
+                    // Lấy ID của sản phẩm
+                    int bookId = cartItem.getBook().getBookId();
+
+                    // Tham chiếu đến trường "unitInStock" tương ứng của sản phẩm
+                    DatabaseReference unitInStockRef = FirebaseDatabase.getInstance().getReference().child("books").child(String.valueOf(bookId)).child("unitInStock");
+
+                    unitInStockRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                long unitInStock = dataSnapshot.getValue(Long.class);
+
+                                if (unitInStock >= qty) {
+                                    // Cập nhật giỏ hàng nếu số lượng sách còn đủ
+                                    updateCartQty(bookId, qty);
+                                } else {
+                                    // Số lượng sách còn không đủ, thông báo cho người dùng
+                                    Toast.makeText(mContext, "Sản phẩm đã hết hàng hoặc không đủ số lượng!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Xử lý lỗi nếu có
+                        }
+                    });
                 }
             });
 
@@ -67,12 +111,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 @Override
                 public void onClick(View view) {
                     int position = holder.getBindingAdapterPosition();
-                    Cart cartItem = mListCart.get(position);
-                    int qty = cartItem.getQuantity() - 1;
-                    if (qty < 0) {
-                        qty = 0;
+
+                    if (position >= 0 && position < mListCart.size()) {
+                        Cart cartItem = mListCart.get(position);
+                        int qty = cartItem.getQuantity() - 1;
+                        if (qty < 0) {
+                            qty = 0;
+                        }
+                        updateCartQty(cartItem.getBook().getBookId(), qty);
+                    } else {
+                        // Xử lý tình huống khi position không hợp lệ
                     }
-                    updateCartQty(cartItem.getBook().getBookId(), qty);
                 }
             });
         }
@@ -86,6 +135,34 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 calculateTotalPrice();
             }
         });
+        holder.icon_delete_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = holder.getBindingAdapterPosition();
+                Cart cartItem = mListCart.get(position);
+                int productId = cartItem.getBook().getBookId(); // Lấy productID từ Cart
+                String userId = "1"; // Thay thế bằng cách lấy ID của người dùng hiện tại
+                removeFromCart(userId, productId);
+            }
+        });
+    }
+    private void removeFromCart(String userId, int productId) {
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference().child("carts").child(userId);
+
+        // Xóa sản phẩm khỏi giỏ hàng
+        cartRef.child(String.valueOf(productId)).removeValue()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(mContext, "Sản phẩm đã được xóa!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext, "Xóa không thành công!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void updateCartQty(int bookId, int newQty) {
@@ -135,6 +212,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private ImageView remove_item;
         private ImageView add_item;
 
+        private ImageView icon_delete_item;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             itemcartname = itemView.findViewById(R.id.item_cart_name);
@@ -143,6 +221,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             checkbook = itemView.findViewById(R.id.check);
             remove_item = itemView.findViewById(R.id.remove_item);
             add_item = itemView.findViewById(R.id.add_item);
+            icon_delete_item = itemView.findViewById(R.id.icon_delete_item);
         }
     }
 
