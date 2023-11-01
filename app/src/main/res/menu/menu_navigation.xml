@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+
+    <group android:checkableBehavior="single">
+        <item
+
+            android:title="@string/nav_cart"
+            android:icon="@drawable/ic_person"
+            />
+
+        <item
+
+            android:title="@string/nav_location"
+            android:icon="@drawable/ic_lock"
+            />
+
+
+
+    </group>
+
+
+    <item
+        android:title="@string/nav_title">
+
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:title="@string/nav_my_profile"
+                android:icon="@drawable/ic_person"
+                />
+
+            <item
+                android:id="@+id/nav_password"
+                android:title="@string/nav_change_password"
+                android:icon="@drawable/ic_lock"
+                />
+
+            <item
+                android:id="@+id/nav_signout"
+                android:title="@string/nav_signout"
+                android:icon="@drawable/ic_logout"
+                />
+        </menu>
+    </item>
+
+
+
+</menu>
