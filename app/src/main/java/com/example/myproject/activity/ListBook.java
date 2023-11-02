@@ -140,8 +140,14 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
         chatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ListBook.this, ChatActivity.class);
-                startActivity(intent);
+                if(user_current.getEmail().equals(Utils.EMAIL_AD)){
+                    Intent intent = new Intent(ListBook.this, UserChatActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(ListBook.this, ChatActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
