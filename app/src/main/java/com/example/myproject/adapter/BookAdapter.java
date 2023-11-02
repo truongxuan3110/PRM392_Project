@@ -64,7 +64,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
       // holder.imgProduct.setImageResource(book.getImg());
         holder.txtName.setText(book.getBookTitle());
-        holder.txtPrice.setText(String.valueOf(book.getPrice()));
+        holder.txtPrice.setText(String.valueOf(book.getPrice()) + " VNĐ");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

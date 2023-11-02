@@ -65,7 +65,6 @@ public class CartActivity extends BaseActivity {
             }
         });
         getCartProducts(user_current.getUid()); // fix cứng userID
-        // Sự kiện thanh toán
         btn_Buy = findViewById(R.id.btn_buy);
         btn_Buy.setOnClickListener(new View.OnClickListener() {
             @Override
