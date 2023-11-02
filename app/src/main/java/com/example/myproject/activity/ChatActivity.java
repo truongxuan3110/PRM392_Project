@@ -161,6 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
+                            retrieveInitialMessages();
                             // Tin nhắn đã được gửi thành công
                             // Không cần thêm bước tường minh để cập nhật danh sách chatMessages,
                             // vì sự kiện lắng nghe Firestore sẽ tự động cập nhật danh sách khi có thay đổi
@@ -198,7 +199,7 @@ public class ChatActivity extends AppCompatActivity {
         // Lấy tin nhắn ban đầu từ Firestore và thêm vào danh sách chatMessages
         // Thông qua Firebase Firestore Query
         db.collection(Utils.PATH_CHAT)
-//                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
+                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
                 .orderBy("datetime", Query.Direction.ASCENDING) // Sắp xếp theo thời gian
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
