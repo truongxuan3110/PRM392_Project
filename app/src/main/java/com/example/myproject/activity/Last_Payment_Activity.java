@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,11 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myproject.R;
 import com.example.myproject.adapter.PaymentAdapter;
 import com.example.myproject.models.Cart;
 import com.example.myproject.models.OrderDetail;
 import com.example.myproject.models.Orders;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -31,7 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class Last_Payment_Activity extends AppCompatActivity {
+public class Last_Payment_Activity extends BaseActivity {
     private RecyclerView mRecyclerProduct;
     private PaymentAdapter mPaymentAdapter;
     double totalValue = 0.0;
@@ -40,11 +44,16 @@ public class Last_Payment_Activity extends AppCompatActivity {
     private TextView totalprice;
     //ImageView btnnext;
     private Button btn_payment;
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.last_payment);
+        setupToolbar();
+        TextView nameScreen = findViewById(R.id.nameScreen);
+        nameScreen.setText("Thanh toán");
+
         paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         List<String> paymentOptions = new ArrayList<>();
         paymentOptions.add("Thẻ tín dụng");
@@ -70,6 +79,8 @@ public class Last_Payment_Activity extends AppCompatActivity {
         String receiver_name = intent.getStringExtra("RECEIVER_NAME");
         String receiver_phone = intent.getStringExtra("RECEIVER_PHONE");
         String receiver_address = intent.getStringExtra("RECEIVER_ADDRESS");
+        String receiver_note = intent.getStringExtra("RECEIVER_NOTE");
+
         String choose_Book = intent.getStringExtra("listCart");
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Cart>>() {}.getType(); // Định nghĩa kiểu dữ liệu mục tiêu
@@ -79,6 +90,7 @@ public class Last_Payment_Activity extends AppCompatActivity {
         TextView txt_rv_name = findViewById(R.id.txt_User_name);
         TextView txt_rv_phone = findViewById(R.id.txt_phone);
         TextView txt_rv_address = findViewById(R.id.txt_address);
+        ImageView img_book = findViewById(R.id.item_payment_image);
 
         txt_rv_name.setText(String.valueOf(receiver_name));
         txt_rv_phone.setText(String.valueOf(receiver_phone));
@@ -99,11 +111,11 @@ public class Last_Payment_Activity extends AppCompatActivity {
                                 DatabaseReference newOrderRef = databaseReference.push();
                                 String orderID = newOrderRef.getKey(); // Lấy ID đơn đặt hàng tự động
                                 Orders order = new Orders(
-                                        0, // userId - thay bằng ID người dùng thực tế
+                                        user_current.getUid(), // userId - thay bằng ID người dùng thực tế
                                         receiver_phone,
                                         receiver_address,
                                         orderTime,
-                                        "Note", // Thêm thông tin note ở đây
+                                        receiver_note, // Thêm thông tin note ở đây
                                         orderTotalCost, // Chuyển đổi totalPrice sang kiểu float
                                         "Pending", // Trạng thái đơn hàng mặc định
                                         "Thanh toán khi nhận hàng"
@@ -111,7 +123,6 @@ public class Last_Payment_Activity extends AppCompatActivity {
                                 newOrderRef.setValue(order);
                                 DatabaseReference orderDetailsRef = FirebaseDatabase.getInstance().getReference("orderDetails");
                                 for (Cart orderDetail : selected) {
-                                    // Tạo một đối tượng OrderDetail với thông tin chi tiết đơn hàng
                                     OrderDetail orderDetailData = new OrderDetail(
                                             orderID,
                                             orderDetail.getBook().getBookId(), // bookId
@@ -119,7 +130,6 @@ public class Last_Payment_Activity extends AppCompatActivity {
                                             orderDetail.getQuantity() * orderDetail.getBook().getPrice() // total
                                     );
 
-                                    // Tạo một nút con mới cho chi tiết đơn hàng và sử dụng push để có ID duy nhất
                                     DatabaseReference newOrderDetailRef = orderDetailsRef.push();
                                     newOrderDetailRef.setValue(orderDetailData);
                                 }

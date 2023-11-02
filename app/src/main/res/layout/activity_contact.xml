@@ -14,11 +14,67 @@
         android:background="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:title="Contact"
-        app:titleTextColor="@color/white" />
+        app:layout_constraintVertical_bias="0.002">
+
+        <!-- Thêm nút back -->
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="Back"
+            android:onClick="onBackPressed"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+        <TextView
+            android:id="@+id/nameScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:text="Contact"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/cart_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cart" />
+
+            <TextView
+                android:id="@+id/cart_count"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="10dp" />
+
+            <ImageView
+                android:id="@+id/chat_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/baseline_chat_24" />
+
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:layout_width="match_parent"

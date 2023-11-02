@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Orders {
    // private int OrderId;
-    private int UserId;
+    private String UserId;
     private String phone;
     private String address;
     private Date orderDate;
@@ -13,9 +13,9 @@ public class Orders {
     private String status;
     private String payment;
 
-    public Orders( int userId, String phone, String address, Date orderDate, String note, float orderTotalCost, String status, String payment) {
+    public Orders( String UserId, String phone, String address, Date orderDate, String note, float orderTotalCost, String status, String payment) {
        // OrderId = orderId;
-        UserId = userId;
+        this.UserId = UserId;
         this.phone = phone;
         this.address = address;
         this.orderDate = orderDate;
@@ -33,12 +33,12 @@ public class Orders {
 //        OrderId = orderId;
 //    }
 
-    public int getUserId() {
+    public String getUserId() {
         return UserId;
     }
 
-    public void setUserId(int userId) {
-        UserId = userId;
+    public void setUserId(String UserId) {
+        UserId = UserId;
     }
 
     public String getPhone() {

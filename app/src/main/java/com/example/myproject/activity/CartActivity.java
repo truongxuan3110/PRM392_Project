@@ -22,6 +22,8 @@ import com.example.myproject.adapter.CartAdapter;
 import com.example.myproject.models.Book;
 import com.example.myproject.models.Cart;
 import com.example.myproject.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,12 +36,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends BaseActivity {
     private RecyclerView mRecyclerProduct;
     private CartAdapter mCartAdapter;
    // private List<Cart> mCartProducts;
    TextView totalpriceTextView ;
     private double totalPrice; // Biến để lưu giá trị tổng giá
+    FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
    // Bắt sự kiện thanh toán
    Button btn_Buy;
@@ -48,6 +51,7 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_cart);
+        setupToolbar();
         totalpriceTextView = findViewById(R.id.totalprice);
 
         mRecyclerProduct = findViewById(R.id.rcv_product_cart);
@@ -60,7 +64,7 @@ public class CartActivity extends AppCompatActivity {
                 totalpriceTextView.setText(String.valueOf(totalPrice));
             }
         });
-        getCartProducts("1"); // fix cứng userID
+        getCartProducts(user_current.getUid()); // fix cứng userID
         // Sự kiện thanh toán
         btn_Buy = findViewById(R.id.btn_buy);
         btn_Buy.setOnClickListener(new View.OnClickListener() {
@@ -100,16 +104,12 @@ public class CartActivity extends AppCompatActivity {
                 for (DataSnapshot cartSnapshot : dataSnapshot.getChildren()) {
                     int bookId = cartSnapshot.child("bookId").getValue(Integer.class);
                     int quantity = cartSnapshot.child("quantity").getValue(Integer.class);
-                    // Lấy thông tin sản phẩm từ Firebase dựa trên bookId
-                    // Ví dụ: Sử dụng một hàm nào đó để lấy thông tin sản phẩm từ Firebase
                     getBookInfoFromFirebase(bookId, new FirebaseCallback() {
                         @Override
                         public void onCallback(Book book) {
                             if (book != null) {
-                                Cart cartItem = new Cart("1", quantity, book);
+                                Cart cartItem = new Cart(user_current.getUid(), quantity, book);
                                 cartProducts.add(cartItem);
-
-                                // Sau khi cập nhật danh sách sản phẩm trong giỏ hàng, cập nhật giao diện người dùng
                                 mCartAdapter.setData(cartProducts);
                                 mRecyclerProduct.setAdapter(mCartAdapter);
                             }
