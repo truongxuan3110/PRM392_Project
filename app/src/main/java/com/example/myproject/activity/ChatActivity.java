@@ -141,8 +141,6 @@ public class ChatActivity extends AppCompatActivity {
                 // Gửi tin nhắn mới lên Firestore
                 sendMessageToFirestore(edtMess.getText().toString());
                 edtMess.setText(""); // Xóa nội dung tin nhắn trong EditText
-
-                retrieveInitialMessages();
             }
         });
     }
@@ -200,7 +198,7 @@ public class ChatActivity extends AppCompatActivity {
         // Lấy tin nhắn ban đầu từ Firestore và thêm vào danh sách chatMessages
         // Thông qua Firebase Firestore Query
         db.collection(Utils.PATH_CHAT)
-                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
+//                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
                 .orderBy("datetime", Query.Direction.ASCENDING) // Sắp xếp theo thời gian
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
