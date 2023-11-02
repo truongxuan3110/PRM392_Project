@@ -141,6 +141,8 @@ public class ChatActivity extends AppCompatActivity {
                 // Gửi tin nhắn mới lên Firestore
                 sendMessageToFirestore(edtMess.getText().toString());
                 edtMess.setText(""); // Xóa nội dung tin nhắn trong EditText
+
+                retrieveInitialMessages();
             }
         });
     }
@@ -161,7 +163,6 @@ public class ChatActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            retrieveInitialMessages();
                             // Tin nhắn đã được gửi thành công
                             // Không cần thêm bước tường minh để cập nhật danh sách chatMessages,
                             // vì sự kiện lắng nghe Firestore sẽ tự động cập nhật danh sách khi có thay đổi
