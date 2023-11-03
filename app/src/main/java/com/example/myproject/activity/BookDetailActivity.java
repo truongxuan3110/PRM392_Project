@@ -1,12 +1,15 @@
 package com.example.myproject.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -104,9 +107,38 @@ public class BookDetailActivity extends BaseActivity {
         buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
-                //         int productId = intent.getIntExtra("PRODUCT_ID", 0); truyền ID sang để check checkbox
-                startActivity(intent2);
+
+//                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+//                String userId = prefs.getString("userId", null);
+//                String authToken = prefs.getString("authToken", null);
+//                Log.d("UserId", userId); // In giá trị userId vào Logcat
+//                Log.d("AuthToken", authToken); // In giá trị authToken vào Logcat
+                if (user_current.getUid() != null) {
+                    Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
+                    startActivity(intent2);
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Yêu cầu đăng nhập");
+                    builder.setMessage("Bạn cần đăng nhập để tiếp tục. Bạn có muốn đăng nhập không?");
+
+                    // Xác nhận đăng nhập
+                    builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Người dùng đã chọn hủy bỏ
+                            // Có thể thực hiện các hành động khác tùy ý ở đây
+                        }
+                    });
+                }
+
+
+
+
 
             }
         });
@@ -118,16 +150,37 @@ public class BookDetailActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
+//                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+//                String userId = prefs.getString("userId", null);
+//                String authToken = prefs.getString("authToken", null);
+//                Log.d("UserId", userId); // In giá trị userId vào Logcat
+//                Log.d("AuthToken", authToken); // In giá trị authToken vào Logcat
+                if (user_current.getUid() != null ) {
+                    // if (userIsLoggedIn) {
+                    // Thêm sách vào giỏ hàng trên Firebase
+                    addToCart(productId, user_current.getUid());
+                    Toast.makeText(mContext, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
+                    sendNotification();
 
-                // if (userIsLoggedIn) {
-                // Thêm sách vào giỏ hàng trên Firebase
-                addToCart(productId, user_current.getUid());
-                //  } else {
-                // Yêu cầu người dùng đăng nhập hoặc đăng ký
-                // Hiển thị một hộp thoại hoặc chuyển đến màn hình đăng nhập/đăng ký
-                //   }
-                sendNotification();
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Yêu cầu đăng nhập");
+                    builder.setMessage("Bạn cần đăng nhập để tiếp tục. Bạn có muốn đăng nhập không?");
+
+                    // Xác nhận đăng nhập
+                    builder.setPositiveButton("Đăng nhập", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                                 startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Người dùng đã chọn hủy bỏ
+                            // Có thể thực hiện các hành động khác tùy ý ở đây
+                        }
+                    });
+                }
             }
 
             private void addToCart(int bookId, String userId) {

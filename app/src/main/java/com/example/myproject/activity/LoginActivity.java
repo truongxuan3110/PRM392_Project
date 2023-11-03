@@ -1,7 +1,9 @@
 package com.example.myproject.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,9 +31,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SharedPreferences sharedPreferences = getSharedPreferences("authen", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", "");
+        String authToken = sharedPreferences.getString("email", "");
 
-        initUi();
-        initListener();
+       Log.d("UserId", userId); // In giá trị userId vào Logcat
+      Log.d("AuthToken", authToken); // In giá trị authToken vào Logcat
+        if (userId != "" && authToken != "") {
+            Intent intent = new Intent(LoginActivity.this, ListBook.class);
+
+            startActivity(intent);
+        } else {
+            initUi();
+            initListener();
+        }
+
 
     }
 
@@ -46,7 +61,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+
                 startActivity(intent);
+
 
             }
         });
@@ -69,9 +86,22 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Intent intent = new Intent(LoginActivity.this, ListBook.class);
-                            startActivity(intent);
+                            FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user_current != null) {
+                                // Lưu thông tin người dùng vào SharedPreferences
+                                SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putString("userId", user_current.getUid());
+                                editor.putString("email", user_current.getEmail());
+                                editor.apply();
+                               // Log.d("UserId", strEmail); // In giá trị userId vào Logcat
+                              //  Log.d("AuthToken", strPass); // In giá trị authToken vào Logcat
+                                // Sign in success, update UI with the signed-in user's information
+                                Intent intent = new Intent(LoginActivity.this, ListBook.class);
+                                startActivity(intent);
+                            }
+
+
                         } else {
                             // If sign in fails, display a message to the user.
 
