@@ -17,14 +17,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myproject.R;
+import com.example.myproject.adapter.LastPaymentAdapter;
 import com.example.myproject.adapter.PaymentAdapter;
+import com.example.myproject.models.Book;
 import com.example.myproject.models.Cart;
 import com.example.myproject.models.OrderDetail;
 import com.example.myproject.models.Orders;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,7 +42,8 @@ import java.util.List;
 
 public class Last_Payment_Activity extends BaseActivity {
     private RecyclerView mRecyclerProduct;
-    private PaymentAdapter mPaymentAdapter;
+   // private PaymentAdapter mPaymentAdapter;
+    private LastPaymentAdapter mlastPaymentAdapter;
     double totalValue = 0.0;
     private Spinner paymentMethodSpinner;
     private String paymentMethod;
@@ -50,10 +56,21 @@ public class Last_Payment_Activity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.last_payment);
+
+
+        mRecyclerProduct = findViewById(R.id.rcv_product_last_payment);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        mRecyclerProduct.setLayoutManager(linearLayoutManager);
+        mlastPaymentAdapter = new LastPaymentAdapter(this);
+        mlastPaymentAdapter.setData(new ArrayList<>()); // Khởi tạo Adapter với danh sách ban đầu rỗng
+
+        mRecyclerProduct.setAdapter(mlastPaymentAdapter);
+
         setupToolbar();
+        // set name toolbar
         TextView nameScreen = findViewById(R.id.nameScreen);
         nameScreen.setText("Thanh toán");
-
+         // set up Spinner
         paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         List<String> paymentOptions = new ArrayList<>();
         paymentOptions.add("Thẻ tín dụng");
@@ -75,6 +92,7 @@ public class Last_Payment_Activity extends BaseActivity {
             }
         });
         Intent intent = getIntent();
+        // thong tin nguoi nhan
         String totalPrice = intent.getStringExtra("TOTAL_PRICE_PAYMENT");
         String receiver_name = intent.getStringExtra("RECEIVER_NAME");
         String receiver_phone = intent.getStringExtra("RECEIVER_PHONE");
@@ -85,6 +103,9 @@ public class Last_Payment_Activity extends BaseActivity {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Cart>>() {}.getType(); // Định nghĩa kiểu dữ liệu mục tiêu
         ArrayList<Cart> selected = gson.fromJson(choose_Book, type);
+        mlastPaymentAdapter.setData(selected);
+        mlastPaymentAdapter.notifyDataSetChanged();
+
         totalprice = findViewById(R.id.totalprice);
         totalprice.setText(String.valueOf(totalPrice));
         TextView txt_rv_name = findViewById(R.id.txt_User_name);
@@ -92,9 +113,9 @@ public class Last_Payment_Activity extends BaseActivity {
         TextView txt_rv_address = findViewById(R.id.txt_address);
         ImageView img_book = findViewById(R.id.item_payment_image);
 
-        txt_rv_name.setText(String.valueOf(receiver_name));
-        txt_rv_phone.setText(String.valueOf(receiver_phone));
-        txt_rv_address.setText(String.valueOf(receiver_address));
+        txt_rv_name.setText("Tên người nhận: " + String.valueOf(receiver_name));
+        txt_rv_phone.setText("Số điện thoại:" + String.valueOf(receiver_phone));
+        txt_rv_address.setText("Địa chỉ nhận hàng:" + String.valueOf(receiver_address));
         btn_payment = findViewById(R.id.btn_payment);
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,4 +170,5 @@ public class Last_Payment_Activity extends BaseActivity {
             }
         });
     }
+
 }

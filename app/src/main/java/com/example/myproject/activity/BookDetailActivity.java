@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,8 +84,7 @@ public class BookDetailActivity extends BaseActivity {
         TextView priceTextView = findViewById(R.id.detail_text_view_price);
         TextView quanityTextView = findViewById(R.id.detail_text_view_quanity);
         TextView desTextView = findViewById(R.id.detail_text_view_desciption);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        toolbar.setTitle("Chi tiet san pham");
+
         TextView nameScreen = findViewById(R.id.nameScreen);
         nameScreen.setText("Chi tiết sản phẩm");
 
@@ -105,7 +105,9 @@ public class BookDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent2 = new Intent(BookDetailActivity.this, CartActivity.class);
+                //         int productId = intent.getIntExtra("PRODUCT_ID", 0); truyền ID sang để check checkbox
                 startActivity(intent2);
+
             }
         });
 
@@ -121,7 +123,6 @@ public class BookDetailActivity extends BaseActivity {
                 // if (userIsLoggedIn) {
                 // Thêm sách vào giỏ hàng trên Firebase
                 addToCart(productId, user_current.getUid());
-
                 //  } else {
                 // Yêu cầu người dùng đăng nhập hoặc đăng ký
                 // Hiển thị một hộp thoại hoặc chuyển đến màn hình đăng nhập/đăng ký
@@ -223,7 +224,6 @@ public class BookDetailActivity extends BaseActivity {
 
     private void updateCartIconCount(int count, ImageView cartIcon, TextView cartCount) {
         // Tùy chỉnh biểu tượng giỏ hàng để hiển thị số loại sách
-        // Ví dụ: có thể sử dụng một Badge hoặc TextView để hiển thị số count
         if (count >= 0) {
             cartIcon.setVisibility(View.VISIBLE);
             cartCount.setText(String.valueOf(count));
