@@ -1,6 +1,7 @@
 package com.example.myproject.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -100,8 +101,17 @@ public class RegisterActivity extends AppCompatActivity {
                                 databaseReference.child("user").child(FirebaseAuth.getInstance().getUid()).child("phone").setValue(phoneTxt);
 
                                 if (task.isSuccessful()) {
-                                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(RegisterActivity.this, ListBook.class);
                                     startActivity(intent);
+
+                                    // lưu thoogn tin đăng nhập sẽ xóa khi ngươời dùng nhấn đăng xuất
+                                    SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putString("userId", FirebaseAuth.getInstance().getUid());
+                                    editor.putString("email", emailTxt);
+                                    editor.apply();
+
+
                                     finishAffinity();
                                 } else {
                                     Toast.makeText(RegisterActivity.this, "Email is already registerd",

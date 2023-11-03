@@ -1,7 +1,15 @@
 package com.example.myproject.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -49,7 +58,42 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
 
     private DrawerLayout mDrawerLayout;
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
+    private Handler networkCheckHandler = new Handler();
+    private int networkCheckInterval = 10000; // Đợi 30 giây trước khi kiểm tra lại kết nối
 
+    private Runnable networkCheckRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // Kiểm tra kết nối mạng
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+
+            if (capabilities != null) {
+                // Nếu có kết nối mạng
+                SharedPreferences sharedPreferences = getSharedPreferences("authen", MODE_PRIVATE);
+                String userId = sharedPreferences.getString("userId", "");
+                String authToken = sharedPreferences.getString("email", "");
+
+                if (!userId.isEmpty() && !authToken.isEmpty()) {
+                    // Nếu có kết nối mạng và đã đăng nhập, tải dữ liệu
+                    getListProductFromFirebase();
+                    searchBook();
+                    setToolbar();
+                }
+            } else {
+                Log.d("AuthToken", "Không có kết nối mạng"); // In giá trị authToken vào Logcat
+                // Không có kết nối mạng
+                AlertDialog.Builder builder = new AlertDialog.Builder(ListBook.this);
+                builder.setTitle("Thông báo");
+                builder.setMessage("Bạn cần kết nối mạng để sử dụng ứng dụng");
+                builder.setPositiveButton("Đóng", null);
+                AlertDialog dialog = builder.create();
+                dialog.show();   }
+
+            // Lập lịch kiểm tra lại kết nối sau khoảng thời gian
+            networkCheckHandler.postDelayed(this, networkCheckInterval);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,16 +118,44 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
 
         mRecyclerBook = findViewById(R.id.rcv_product);
         mBookAdapter = new BookAdapter(this);
-        //  setupToolbar();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
         mRecyclerBook.setLayoutManager(layoutManager);
         mBookAdapter.setData(new ArrayList<>()); // Khởi tạo Adapter với danh sách ban đầu rỗng
         mRecyclerBook.setAdapter(mBookAdapter);
-        getListProductFromFirebase();
-        searchBook();
-        setToolbar();
-    }
+        networkCheckHandler.post(networkCheckRunnable);
+
+// Tạo một Runnable để kiểm tra lại kết nối mạng
+
+//        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+//            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+//
+//            if (capabilities != null) {
+//               // if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                    SharedPreferences sharedPreferences = getSharedPreferences("authen", MODE_PRIVATE);
+//                    String userId = sharedPreferences.getString("userId", "");
+//                    String authToken = sharedPreferences.getString("email", "");
+//                    if (userId != "" && authToken != "") {
+//                        // Nếu có kết nối mạng và đã đăng nhập, bắt đầu kiểm tra lại kết nối mạng theo định kỳ
+//                      //  isConnected = true;
+//                        // Nếu có kết nối mạng, tải dữ liệu
+//                        getListProductFromFirebase();
+//                        searchBook();
+//                        setToolbar();
+//                    }
+//               // }
+//            }else {
+//                    Log.d("AuthToken","ko co ket noi mang"); // In giá trị authToken vào Logcat
+//                    // Không có kết nối mạng
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                    builder.setTitle("Thông báo");
+//                    builder.setMessage("Bạn cần kết nối mạng để sử dụng ứng dụng");
+//                    builder.setPositiveButton("Đóng", null);
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//                }
+            }
+
     public void searchBook() {
         SearchView search = findViewById(R.id.searchView);
         search.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +212,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
         chatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(user_current.getEmail().equals(Utils.EMAIL_AD)){
                     Intent intent = new Intent(ListBook.this, UserChatActivity.class);
                     startActivity(intent);
@@ -246,10 +319,13 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
         } else if (id == R.id.nav_password) {
 
         } else if (id == R.id.nav_signout) {
-
+            SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.remove("userId");
+            editor.remove("email");
+            editor.apply();
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(ListBook.this, LoginActivity.class);
-
             startActivity(intent);
         }
 
