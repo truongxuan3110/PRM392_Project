@@ -1,8 +1,6 @@
 package com.example.myproject.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myproject.R;
+import com.example.myproject.activity.Last_Payment_Activity;
 import com.example.myproject.activity.PaymentActivity;
 import com.example.myproject.models.Cart;
-import com.example.myproject.models.OrderDetail;
 
 import java.util.List;
 
-public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder> {
+public class LastPaymentAdapter extends RecyclerView.Adapter<LastPaymentAdapter.LastPaymentViewHolder> {
     private Context mContext;
     private List<Cart> mListOrderDetail;
-    public PaymentAdapter(PaymentActivity mContext) {
+
+    public LastPaymentAdapter(Last_Payment_Activity mContext) {
         this.mContext = mContext;
     }
 
@@ -33,27 +32,28 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
         notifyDataSetChanged();
         // hàm notifyDataSetChanged để gọi để adapter bind vào adapter
     }
+
     @NonNull
     @Override
-    public PaymentAdapter.PaymentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public LastPaymentAdapter.LastPaymentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment, parent, false);
-        return new PaymentViewHolder(view);
+        return new LastPaymentAdapter.LastPaymentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LastPaymentAdapter.LastPaymentViewHolder holder, int position) {
         Cart orderDetail = mListOrderDetail.get(position);
-        if(orderDetail == null){
+        if (orderDetail == null) {
             return;
         }
         Glide.with(mContext)
                 .load(orderDetail.getBook().getImg())
                 .into(holder.item_payment_image);
-       // holder.item_payment_image.setImageResource(orderDetail.getBook().getImg());
+        // holder.item_payment_image.setImageResource(orderDetail.getBook().getImg());
         holder.item_payment_name.setText(orderDetail.getBook().getBookTitle());
         holder.item_payment_price.setText(String.valueOf(orderDetail.getBook().getPrice()));
         holder.item_payment_quantity.setText(String.valueOf(orderDetail.getQuantity()));
-        holder.item_payment_totalPrice.setText(String.valueOf("Tổng tiền của " + orderDetail.getQuantity()+ " sản phẩm là: " + orderDetail.getQuantity() *orderDetail.getBook().getPrice()));
+        holder.item_payment_totalPrice.setText(String.valueOf("Tổng tiền của " + orderDetail.getQuantity() + " sản phẩm là: " + orderDetail.getQuantity() * orderDetail.getBook().getPrice()));
 
     }
 
@@ -67,18 +67,18 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
 
     }
 
-    public class PaymentViewHolder extends RecyclerView.ViewHolder {
+    public class LastPaymentViewHolder extends RecyclerView.ViewHolder {
         private ImageView item_payment_image;
         private TextView item_payment_name;
         private TextView item_payment_price;
         private TextView item_payment_quantity;
         private TextView item_payment_totalPrice;
 
-       // private TextView txtPrice;
+        // private TextView txtPrice;
 
 
-        // là nơi khai báo các thành phần có trong items_product.xml
-        public PaymentViewHolder(@NonNull View itemView) {
+        // là nơi khai báo các thành phần có trong rcv_product_last_payment.xml
+        public LastPaymentViewHolder(@NonNull View itemView) {
             super(itemView);
             item_payment_image = itemView.findViewById(R.id.item_payment_image);
             item_payment_name = itemView.findViewById(R.id.item_payment_name);

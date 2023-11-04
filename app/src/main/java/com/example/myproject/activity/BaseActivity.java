@@ -1,20 +1,15 @@
 package com.example.myproject.activity;
 
-import static android.Manifest.permission.CALL_PHONE;
-
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.example.myproject.R;
+import com.example.myproject.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,42 +18,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ContactActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
-    private ImageView mMap;
-    private Button btnCall;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact);
-        mMap = findViewById(R.id.mMap);
-        setupToolbar();
-        mMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ContactActivity.this, MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-        btnCall = findViewById(R.id.callPhone);
-        btnCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:0974414699"));
-                if (ActivityCompat.checkSelfPermission(ContactActivity.this,CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ContactActivity.this, new String[]{CALL_PHONE}, 1);
-                    return;
-                }
-                startActivity(intent);
-            }
-        });
-    }
-    public void setupToolbar(){
+    protected void setupToolbar() {
+       // Toolbar toolbar = findViewById(R.id.toolbar);
         FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
         ImageView cartIcon = findViewById(R.id.cart_icon);
         ImageView chatIcon = findViewById(R.id.chat_icon);
+        ImageView infoIcon = findViewById(R.id.infor_icon);
         ImageView backImageView = findViewById(R.id.back_button);
         TextView cartCount = findViewById(R.id.cart_count);
         String userId = user_current.getUid(); // Thay thế bằng ID của người dùng cần đếm số lượng phần tử trong "carts/userId"
@@ -88,7 +55,7 @@ public class ContactActivity extends AppCompatActivity {
         cartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ContactActivity.this, CartActivity.class);
+                Intent intent = new Intent(BaseActivity.this, CartActivity.class);
                 startActivity(intent);
             }
         });
@@ -96,7 +63,21 @@ public class ContactActivity extends AppCompatActivity {
         chatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ContactActivity.this, ChatActivity.class);
+                if(user_current.getEmail().equals(Utils.EMAIL_AD)){
+                    Intent intent = new Intent(BaseActivity.this, UserChatActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(BaseActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        infoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BaseActivity.this, ContactActivity.class);
                 startActivity(intent);
             }
         });
@@ -108,4 +89,4 @@ public class ContactActivity extends AppCompatActivity {
             }
         });
     }
-    }
+}

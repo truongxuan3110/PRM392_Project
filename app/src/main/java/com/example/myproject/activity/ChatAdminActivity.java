@@ -1,7 +1,5 @@
 package com.example.myproject.activity;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,31 +7,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.myproject.R;
 import com.example.myproject.adapter.ChatAdapter;
 import com.example.myproject.models.ChatMessage;
 import com.example.myproject.utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,10 +36,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.logging.SimpleFormatter;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatAdminActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Toolbar toolbar;
     ImageView imgSend;
@@ -61,79 +46,27 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter adapter;
     List<ChatMessage> list;
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
-    ImageView cartIcon , infoIcon , backImageView ;
+    String emailUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_admin);
+        emailUser = getIntent().getStringExtra("email");
         initView();
         initToolbar();
         initControl();
-        insertUser();
     }
+
     private void initToolbar() {
-        infoIcon = findViewById(R.id.infor_icon);
-        backImageView = findViewById(R.id.back_button);
-        cartIcon = findViewById(R.id.cart_icon);
-        TextView cartCount = findViewById(R.id.cart_count);
-        String userId = user_current.getUid(); // Thay thế bằng ID của người dùng cần đếm số lượng phần tử trong "carts/userId"
-        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference().child("carts").child(userId);
-        cartRef.addValueEventListener(new ValueEventListener() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    long itemCount = dataSnapshot.getChildrenCount();
-
-                    if (itemCount >= 0) {
-                        cartIcon.setVisibility(View.VISIBLE);
-                        cartCount.setText(String.valueOf(itemCount));
-                    } else {
-                        cartIcon.setVisibility(View.GONE);
-                    }
-                } else {
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
-            }
-        });
-
-        cartIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, CartActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        infoIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, ContactActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        backImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 finish();
             }
         });
-
-}
-    private void insertUser() {
-        HashMap<String,Object> user = new HashMap<>();
-        user.put("email", user_current.getEmail());
-//        user.put("id", Utils.user_current.getId());
-//        user.put("username", "truong");
-//        user.put("username", Utils.user_current.getUsername());
-        db.collection("users").document(String.valueOf(user_current.getEmail())).set(user);
     }
-
     private void initControl() {
         imgSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,8 +83,8 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             HashMap<String, Object> message = new HashMap<>();
             message.put(Utils.SENDID, user_current.getEmail()); //message.put(Utils.SENDID,String.valueOf(Utils.user_current.getId())); //lấy Id người gửi
-            message.put(Utils.RECEIVEDID, Utils.EMAIL_AD); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
-            message.put(Utils.PARTICIPANTID, user_current.getEmail());
+            message.put(Utils.RECEIVEDID, emailUser); //message.put(Utils.RECEIVEDID,Utils.ID_RECEIVED); //lấy Id người nhận
+            message.put(Utils.PARTICIPANTID, emailUser);
             message.put(Utils.MESS, str_mes);
             message.put(Utils.DATETIME, new Date());
 
@@ -180,6 +113,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         toolbar = findViewById(R.id.toolbar);
         list = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
@@ -198,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
         // Lấy tin nhắn ban đầu từ Firestore và thêm vào danh sách chatMessages
         // Thông qua Firebase Firestore Query
         db.collection(Utils.PATH_CHAT)
-//                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
+//                .whereEqualTo(Utils.PARTICIPANTID, emailUser)
                 .orderBy("datetime", Query.Direction.ASCENDING) // Sắp xếp theo thời gian
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -210,7 +144,7 @@ public class ChatActivity extends AppCompatActivity {
                         int count = list.size();
                         list.clear(); // Xóa danh sách tin nhắn hiện tại
                         for (QueryDocumentSnapshot document : value) {
-                            if(document.getString(Utils.PARTICIPANTID).equals(user_current.getEmail())){
+                            if(document.getString(Utils.PARTICIPANTID).equals(emailUser)){
                                 ChatMessage chatMessage = new ChatMessage();
                                 chatMessage.sendid = document.getString(Utils.SENDID);
                                 chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
@@ -221,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
                             }
                         }
 
-                        Collections.sort(list,(obj1,obj2)-> obj1.dateObj.compareTo(obj2.dateObj));
+                        Collections.sort(list,(obj1, obj2)-> obj1.dateObj.compareTo(obj2.dateObj));
                         if (count==0){
                             adapter.notifyDataSetChanged();
                         }else {

@@ -6,12 +6,14 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.NOTIFICATION" />
-    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />  
-  <application
+    <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyProject"
         tools:targetApi="33">
-
+        <activity
+            android:name=".activity.ChatAdminActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="false" />
@@ -52,12 +56,10 @@
         <activity
             android:name=".activity.MapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:label="@string/title_activity_maps"></activity>
         <activity
             android:name=".activity.ContactActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".activity.UserChatActivity"
             android:exported="false" />
@@ -66,7 +68,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.ChatActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activity.BookDetailActivity"
             android:exported="false" />
@@ -87,11 +89,10 @@
             android:exported="false" />
         <activity
             android:name=".activity.ListBook"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
