@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myproject.R;
 import com.example.myproject.activity.BookDetailActivity;
 import com.example.myproject.activity.ListBook;
@@ -55,9 +56,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         if(book == null){
             return;
         }
-      //  holder.imgProduct.setImageResource(book.getImg());
+       // String imageUrl = "URL_CUA_ANH_TREN_FIREBASE_STORAGE";
+        Glide.with(mContext)
+                .load(book.getImg())
+                .into(holder.imgProduct);
+
+
+      // holder.imgProduct.setImageResource(book.getImg());
         holder.txtName.setText(book.getBookTitle());
-        holder.txtPrice.setText(String.valueOf(book.getPrice()));
+        holder.txtPrice.setText(String.valueOf(book.getPrice()) + " VNĐ");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

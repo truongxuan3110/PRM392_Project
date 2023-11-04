@@ -51,7 +51,12 @@ public class PaymentActivity  extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         mRecyclerProduct.setLayoutManager(linearLayoutManager);
         mPaymentAdapter = new PaymentAdapter(this);
+
+
         mRecyclerProduct.setAdapter(mPaymentAdapter);
+
+
+
         Intent intent = getIntent();
         String jsonCarts = intent.getStringExtra("selectedCarts");
         Gson gson = new Gson();
@@ -65,7 +70,12 @@ public class PaymentActivity  extends AppCompatActivity {
             }
             TextView  totalpriceTextView = findViewById(R.id.totalprice);
             totalpriceTextView.setText(String.valueOf(totalValue));
+        } else{
+
+            ///mPaymentAdapter.setData(selectedCarts);
+
         }
+
         btn_payment = findViewById(R.id.btn_payment);
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override
