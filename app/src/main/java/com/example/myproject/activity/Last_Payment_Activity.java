@@ -1,6 +1,14 @@
 package com.example.myproject.activity;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,13 +61,24 @@ public class Last_Payment_Activity extends BaseActivity {
     private TextView totalprice;
     //ImageView btnnext;
     private Button btn_payment;
+    private static final int NOTIFICATION_ID = 1;
+
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.last_payment);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "CHANNEL_1_ID";
+            String description = "MyChannelDescription";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
 
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         mRecyclerProduct = findViewById(R.id.rcv_product_last_payment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
@@ -91,6 +113,10 @@ public class Last_Payment_Activity extends BaseActivity {
                 // Xử lý khi không có tùy chọn nào được chọn (nếu cần)
             }
         });
+
+        init_payment();
+    }
+    private void init_payment(){
         Intent intent = getIntent();
         // thong tin nguoi nhan
         String totalPrice = intent.getStringExtra("TOTAL_PRICE_PAYMENT");
@@ -122,7 +148,7 @@ public class Last_Payment_Activity extends BaseActivity {
             public void onClick(View view) {
                 if (paymentMethod != null) {
                     if (paymentMethod.equals("Thanh toán khi nhận hàng")) {
-                   Button btnpayment = findViewById(R.id.btn_payment);
+                        Button btnpayment = findViewById(R.id.btn_payment);
                         btnpayment.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -132,12 +158,12 @@ public class Last_Payment_Activity extends BaseActivity {
                                 DatabaseReference newOrderRef = databaseReference.push();
                                 String orderID = newOrderRef.getKey(); // Lấy ID đơn đặt hàng tự động
                                 Orders order = new Orders(
-                                        user_current.getUid(), // userId - thay bằng ID người dùng thực tế
+                                        user_current.getUid(),
                                         receiver_phone,
                                         receiver_address,
                                         orderTime,
-                                        receiver_note, // Thêm thông tin note ở đây
-                                        orderTotalCost, // Chuyển đổi totalPrice sang kiểu float
+                                        receiver_note,
+                                        orderTotalCost,
                                         "Pending", // Trạng thái đơn hàng mặc định
                                         "Thanh toán khi nhận hàng"
                                 );
@@ -154,8 +180,9 @@ public class Last_Payment_Activity extends BaseActivity {
                                     DatabaseReference newOrderDetailRef = orderDetailsRef.push();
                                     newOrderDetailRef.setValue(orderDetailData);
                                 }
+                                sendNotification();
                                 Toast.makeText(Last_Payment_Activity.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Last_Payment_Activity.this, WaitOrderActivity.class);
+                                Intent intent = new Intent(Last_Payment_Activity.this, ListBook.class);
                                 startActivity(intent);
                             }
                         });
@@ -169,6 +196,36 @@ public class Last_Payment_Activity extends BaseActivity {
 
             }
         });
+    }
+
+
+    private void sendNotification() {
+        //   Toast.makeText(mContext, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, ListBook.class);
+        //  CartManager.addToCart(mContext, product); đoạn này add vào firebase
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.baseline_add_shopping_cart_24);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.drawable.mail)
+                .setContentTitle("Đặt hàng thành công!")
+                .setContentText("Vui lòng theo dõi quá trình hàng của bạn được vận chuyển")
+                .setLargeIcon(bitmap)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+
     }
 
 }
