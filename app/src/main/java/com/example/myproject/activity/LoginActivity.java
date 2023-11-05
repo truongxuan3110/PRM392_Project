@@ -100,8 +100,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Can not be blacked", Toast.LENGTH_LONG).show();
         } else if ( !strEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             Toast.makeText(LoginActivity.this, "Email wrong format", Toast.LENGTH_LONG).show();
-        } else if (strPass.length() < 6) {
-            Toast.makeText(LoginActivity.this, "Password must be more than 6 characters", Toast.LENGTH_LONG).show();
+        } else if (strPass.length() < 6|| strPass.length()>20) {
+            Toast.makeText(LoginActivity.this, "Password must be more than 6 characters and less than 20 characters", Toast.LENGTH_LONG).show();
         }else {
             auth.signInWithEmailAndPassword(strEmail, strPass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
