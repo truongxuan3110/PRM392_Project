@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -34,6 +35,8 @@ import com.example.myproject.models.Book;
 import com.example.myproject.models.Cart;
 import com.example.myproject.models.OrderDetail;
 import com.example.myproject.models.Orders;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -179,6 +182,10 @@ public class Last_Payment_Activity extends BaseActivity {
 
                                     DatabaseReference newOrderDetailRef = orderDetailsRef.push();
                                     newOrderDetailRef.setValue(orderDetailData);
+                                }
+                                DatabaseReference deteleCart = FirebaseDatabase.getInstance().getReference("carts").child(user_current.getUid());
+                                for (Cart orderDetail : selected) {
+                                    deteleCart.child(String.valueOf(orderDetail.getBook().getBookId())).removeValue();
                                 }
                                 sendNotification();
                                 Toast.makeText(Last_Payment_Activity.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
