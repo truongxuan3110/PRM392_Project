@@ -232,37 +232,12 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
             }
         });
     }
-//    private void showUserInformation() {
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user == null) {
-//            // Người dùng chưa đăng nhập, không cần hiển thị thông tin.
-//            tvName.setVisibility(View.GONE);
-//            tvEmail.setVisibility(View.GONE);
-//        } else {
-//            String name = user.getDisplayName();
-//            String email = user.getEmail();
-//
-//            if (name != null && !name.isEmpty()) {
-//                tvName.setText(name);
-//            } else {
-//                tvName.setText("Không có tên người dùng");
-//            }
-//
-//            if (email != null && !email.isEmpty()) {
-//                tvEmail.setText(email);
-//            } else {
-//                tvEmail.setText("Không có địa chỉ email");
-//            }
-//        }
-//    }
+
 
     private void showUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            // User is signed in, get their UID
-            //   String userId = user.getUid();
-            // Reference to the user's data in the Realtime Database
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("user").child(FirebaseAuth.getInstance().getUid());
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -349,11 +324,13 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
+//        if (id == R.id.nav_profile) {
+//
+//        } else if (id == R.id.nav_password) {
+//
+//        } else
 
-        } else if (id == R.id.nav_password) {
-
-        } else if (id == R.id.nav_signout) {
+            if (id == R.id.nav_signout) {
             SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.remove("userId");

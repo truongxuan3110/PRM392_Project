@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout layoutSignup;
     private EditText edtMail, edtPassword;
     private Button btnSignin;
+
+    private TextView tvForgot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         edtMail = findViewById(R.id.edt_email_login);
         edtPassword = findViewById(R.id.edt_password_login);
         btnSignin = findViewById(R.id.btn_sign_in_login);
+        tvForgot=findViewById(R.id.tv_forgotpassword);
     }
 
     private void initListener() {
@@ -72,6 +76,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickSignIn();
+            }
+        });
+
+        tvForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -120,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
 
-
-
     }
+
+
 }
