@@ -25,6 +25,9 @@
         android:theme="@style/Theme.MyProject"
         tools:targetApi="33">
         <activity
+            android:name=".activity.OrderDetailHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OrderedHistoryActivity"
             android:exported="false" />
         <activity

@@ -196,6 +196,7 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
                     }
                 } else {
                 }
+                return;
             }
 
             @Override
@@ -278,6 +279,7 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
                 // Cập nhật RecyclerView với kết quả tìm kiếm
                 mBookAdapter.setData(searchResults);
                 mBookAdapter.notifyDataSetChanged();
+                return;
             }
 
             @Override
@@ -303,6 +305,7 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
                 }
                 mBookAdapter.setData(productList);
                 mBookAdapter.notifyDataSetChanged();
+                return;
             }
 
 

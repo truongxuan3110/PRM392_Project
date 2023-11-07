@@ -1,6 +1,8 @@
 package com.example.myproject.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproject.R;
+import com.example.myproject.activity.BookDetailActivity;
+import com.example.myproject.activity.OrderDetailHistoryActivity;
 import com.example.myproject.models.Orders;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +27,7 @@ public class OrderedHistoryAdapter extends RecyclerView.Adapter<OrderedHistoryAd
     private Context context;
     private List<Orders> ordersList;
 
-    private IOrderedHistoryListener orderedHistoryListener;
+
 
     public OrderedHistoryAdapter(Context context) {
         this.context = context;
@@ -34,9 +38,7 @@ public class OrderedHistoryAdapter extends RecyclerView.Adapter<OrderedHistoryAd
         notifyDataSetChanged(); // Thông báo rằng dữ liệu đã thay đổi
     }
 
-    public void setOrderedHistoryListener(IOrderedHistoryListener orderedHistoryListener) {
-        this.orderedHistoryListener = orderedHistoryListener;
-    }
+
 
     @NonNull
     @Override
@@ -87,7 +89,11 @@ public class OrderedHistoryAdapter extends RecyclerView.Adapter<OrderedHistoryAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                orderedHistoryListener.onOrderedItemClicked(view, holder.getAdapterPosition());
+                Log.d("kkkk " , orders.getOrderId());
+                Intent intent = new Intent(context, OrderDetailHistoryActivity.class);
+                intent.putExtra("orderId", orders.getOrderId());
+                context.startActivity(intent);
+               // orderedHistoryListener.onOrderedItemClicked(view, orders.getOrderId());
             }
         });
     }
@@ -121,7 +127,5 @@ public class OrderedHistoryAdapter extends RecyclerView.Adapter<OrderedHistoryAd
         }
     }
 
-    public interface IOrderedHistoryListener {
-        void onOrderedItemClicked(View view, int position);
-    }
+
 }

@@ -115,6 +115,7 @@ public class CartActivity extends BaseActivity {
                         }
                     });
                 }
+
             }
 
 
@@ -137,6 +138,7 @@ public class CartActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Book book = dataSnapshot.getValue(Book.class);
                 callback.onCallback(book);
+
             }
 
             @Override

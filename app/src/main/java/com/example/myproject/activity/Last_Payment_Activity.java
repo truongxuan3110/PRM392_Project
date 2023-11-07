@@ -131,6 +131,7 @@ public class Last_Payment_Activity extends BaseActivity {
                                 DatabaseReference newOrderRef = databaseReference.push();
                                 String orderID = newOrderRef.getKey(); // Lấy ID đơn đặt hàng tự động
                                 Orders order = new Orders(
+                                        orderID,
                                         user_current.getUid(), // userId - thay bằng ID người dùng thực tế
                                         receiver_phone,
                                         receiver_address,

@@ -4,7 +4,9 @@
     import androidx.recyclerview.widget.LinearLayoutManager;
     import androidx.recyclerview.widget.RecyclerView;
 
+    import android.content.Intent;
     import android.os.Bundle;
+    import android.os.Parcelable;
     import android.util.Log;
     import android.view.View;
     import android.widget.AdapterView;
@@ -15,6 +17,7 @@
 
     import com.example.myproject.R;
     import com.example.myproject.adapter.OrderedHistoryAdapter;
+    import com.example.myproject.models.OrderDetail;
     import com.example.myproject.models.Orders;
     import com.google.firebase.auth.FirebaseAuth;
     import com.google.firebase.auth.FirebaseUser;
@@ -24,11 +27,12 @@
     import com.google.firebase.database.FirebaseDatabase;
     import com.google.firebase.database.ValueEventListener;
 
+    import java.io.Serializable;
     import java.util.ArrayList;
     import java.util.Collections;
     import java.util.List;
 
-    public class OrderedHistoryActivity extends AppCompatActivity implements OrderedHistoryAdapter.IOrderedHistoryListener {
+    public class OrderedHistoryActivity extends AppCompatActivity  {
 
         RecyclerView rv_ordersHistory;
         OrderedHistoryAdapter orderedHistoryAdapter;
@@ -84,6 +88,7 @@
                     } else {
                         // Xử lý khi không có đơn hàng nào
                     }
+
                 }
 
                 @Override
@@ -99,7 +104,7 @@
             rv_ordersHistory.setAdapter(orderedHistoryAdapter);
 
 
-            orderedHistoryAdapter.setOrderedHistoryListener(this);
+
             TextView nameScreen = findViewById(R.id.nameScreen);
             nameScreen.setText("Sản phẩm đã đặt");
 
@@ -148,10 +153,5 @@
 
                }
            });
-        }
-
-        @Override
-        public void onOrderedItemClicked(View view, int position) {
-
         }
     }
