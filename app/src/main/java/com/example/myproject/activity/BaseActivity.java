@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 } else {
                 }
+
             }
 
             @Override

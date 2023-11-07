@@ -1,6 +1,10 @@
 package com.example.myproject.models;
 
-public class OrderDetail {
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class OrderDetail implements Serializable {
   //  private int orderDetailId;
     private String orderId;
 
@@ -17,6 +21,9 @@ public class OrderDetail {
     }
 
 
+    public OrderDetail() {
+    }
+
     public String getOrderId() {
         return orderId;
     }
@@ -25,11 +32,11 @@ public class OrderDetail {
         this.orderId = orderId;
     }
 
-    public int getBook() {
+    public int getBookID() {
         return bookID;
     }
 
-    public void setBook(Book book) {
+    public void setBookID(int bookID) {
         this.bookID = bookID;
     }
 

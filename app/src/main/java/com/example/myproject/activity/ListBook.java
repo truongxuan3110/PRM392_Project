@@ -47,7 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListBook extends BaseActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class ListBook extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView mRecyclerBook;
     private BookAdapter mBookAdapter;
@@ -88,12 +88,14 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
                 builder.setMessage("Bạn cần kết nối mạng để sử dụng ứng dụng");
                 builder.setPositiveButton("Đóng", null);
                 AlertDialog dialog = builder.create();
-                dialog.show();   }
+                dialog.show();
+            }
 
             // Lập lịch kiểm tra lại kết nối sau khoảng thời gian
             networkCheckHandler.postDelayed(this, networkCheckInterval);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +156,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
 //                    AlertDialog dialog = builder.create();
 //                    dialog.show();
 //                }
-            }
+    }
 
     public void searchBook() {
         SearchView search = findViewById(R.id.searchView);
@@ -173,6 +175,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
             }
         });
     }
+
     public void setToolbar() {
         ImageView cartIcon = findViewById(R.id.cart_icon);
         ImageView chatIcon = findViewById(R.id.chat_icon);
@@ -193,6 +196,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
                     }
                 } else {
                 }
+                return;
             }
 
             @Override
@@ -213,11 +217,10 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
             @Override
             public void onClick(View view) {
 
-                if(user_current.getEmail().equals(Utils.EMAIL_AD)){
+                if (user_current.getEmail().equals(Utils.EMAIL_AD)) {
                     Intent intent = new Intent(ListBook.this, UserChatActivity.class);
                     startActivity(intent);
-                }
-                else{
+                } else {
                     Intent intent = new Intent(ListBook.this, ChatActivity.class);
                     startActivity(intent);
                 }
@@ -232,7 +235,6 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
             }
         });
     }
-
 
     private void showUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -264,10 +266,9 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
         }
     }
 
-
     private List<Book> performSearch(String query) {
         List<Book> searchResults = new ArrayList<>();
-         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
 
         Query searchQuery = databaseReference.orderByChild("bookTitle") // Thay "title" bằng trường bạn muốn tìm kiếm
                 .startAt(query) // Bắt đầu từ query
@@ -284,6 +285,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
                 // Cập nhật RecyclerView với kết quả tìm kiếm
                 mBookAdapter.setData(searchResults);
                 mBookAdapter.notifyDataSetChanged();
+                return;
             }
 
             @Override
@@ -309,6 +311,7 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
                 }
                 mBookAdapter.setData(productList);
                 mBookAdapter.notifyDataSetChanged();
+                return;
             }
 
 
@@ -324,12 +327,12 @@ public class ListBook extends BaseActivity  implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-//        if (id == R.id.nav_profile) {
-//
-//        } else if (id == R.id.nav_password) {
-//
-//        } else
+        if (id == R.id.aview_ordered) {
+            Intent intent = new Intent(ListBook.this, OrderedHistoryActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_profile) {
 
+        } else if (id == R.id.nav_password) {
             if (id == R.id.nav_signout) {
             SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();

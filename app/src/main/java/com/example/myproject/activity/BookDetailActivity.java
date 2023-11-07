@@ -205,6 +205,7 @@ public class BookDetailActivity extends BaseActivity {
                             cartItemData.put("quantity", 1);
                             cartRef.child(String.valueOf(cartItemId)).setValue(cartItemData);
                         }
+
                     }
 
                     @Override
@@ -266,6 +267,7 @@ public class BookDetailActivity extends BaseActivity {
 
                 // Cập nhật giá trị của cartCount
                 updateCartIconCount(numUniqueBooks, cartIcon, cartCount);
+
             }
 
             @Override

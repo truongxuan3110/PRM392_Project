@@ -8,7 +8,7 @@
     <string name="nav_drawer_open">Open nav</string>
     <string name="nav_drawer_close">Close nav</string>
     <string name="nav_location">Location</string>
-    <string name="nav_cart">Cart</string>
+    <string name="nav_cart">View Ordered</string>
     <string name="title_activity_store_location">StoreLocationActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="my_map_api_key">AIzaSyDw6wHY2-nFWnzRpC2PuA5dcWkTDQoW6SM</string>

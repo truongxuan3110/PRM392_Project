@@ -16,6 +16,7 @@
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,7 +28,6 @@
             android:name=".activity.ForgotPasswordActivity"
             android:exported="true">
         </activity>
-
         <activity
             android:name=".activity.ChatAdminActivity"
             android:exported="false" />
@@ -98,6 +98,12 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
+      <activity
+            android:name=".activity.OrderDetailHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OrderedHistoryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
