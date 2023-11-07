@@ -238,25 +238,31 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
 
     private void showUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // Người dùng chưa đăng nhập, không cần hiển thị thông tin.
-            tvName.setVisibility(View.GONE);
-            tvEmail.setVisibility(View.GONE);
-        } else {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
 
-            if (name != null && !name.isEmpty()) {
-                tvName.setText(name);
-            } else {
-                tvName.setText("Không có tên người dùng");
-            }
+        if (user != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("user").child(FirebaseAuth.getInstance().getUid());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
 
-            if (email != null && !email.isEmpty()) {
-                tvEmail.setText(email);
-            } else {
-                tvEmail.setText("Không có địa chỉ email");
-            }
+                        String displayName = snapshot.child("fullname").getValue(String.class);
+                        String email = snapshot.child("email").getValue(String.class);
+
+                        tvName.setText("Name: " + displayName);
+                        tvEmail.setText("Email: " + email);
+                    } else {
+                        // User data does not exist
+                        tvName.setText("không có");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
     }
 
@@ -327,8 +333,7 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
         } else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_password) {
-
-        } else if (id == R.id.nav_signout) {
+            if (id == R.id.nav_signout) {
             SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.remove("userId");

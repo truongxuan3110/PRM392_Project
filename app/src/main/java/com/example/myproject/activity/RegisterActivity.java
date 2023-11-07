@@ -88,6 +88,8 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Phone must be number", Toast.LENGTH_LONG).show();
         } else if (passwordTxt.length() < 6) {
             Toast.makeText(RegisterActivity.this, "Password must be morethan 6 characters", Toast.LENGTH_LONG).show();
+        } else if (fullNameTxt.length()>20) {
+            Toast.makeText(RegisterActivity.this, "Fullname must be lessthan 20 characters", Toast.LENGTH_LONG).show();
         } else {
             auth.createUserWithEmailAndPassword(emailTxt, passwordTxt)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

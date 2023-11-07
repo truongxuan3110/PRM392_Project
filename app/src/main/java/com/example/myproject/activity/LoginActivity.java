@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout layoutSignup;
     private EditText edtMail, edtPassword;
     private Button btnSignin;
+
+    private TextView tvForgot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         edtMail = findViewById(R.id.edt_email_login);
         edtPassword = findViewById(R.id.edt_password_login);
         btnSignin = findViewById(R.id.btn_sign_in_login);
+        tvForgot=findViewById(R.id.tv_forgotpassword);
     }
 
     private void initListener() {
@@ -74,6 +78,15 @@ public class LoginActivity extends AppCompatActivity {
                 onClickSignIn();
             }
         });
+
+        tvForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void onClickSignIn() {
@@ -81,35 +94,46 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String strEmail = edtMail.getText().toString().trim();
         String strPass = edtPassword.getText().toString().trim();
-        auth.signInWithEmailAndPassword(strEmail, strPass)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user_current != null) {
-                                // Lưu thông tin người dùng vào SharedPreferences
-                                SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putString("userId", user_current.getUid());
-                                editor.putString("email", user_current.getEmail());
-                                editor.apply();
-                               // Log.d("UserId", strEmail); // In giá trị userId vào Logcat
-                              //  Log.d("AuthToken", strPass); // In giá trị authToken vào Logcat
-                                // Sign in success, update UI with the signed-in user's information
-                                Intent intent = new Intent(LoginActivity.this, ListBook.class);
-                                startActivity(intent);
+
+
+        if (strEmail.isEmpty() || strPass.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Can not be blacked", Toast.LENGTH_LONG).show();
+        } else if ( !strEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            Toast.makeText(LoginActivity.this, "Email wrong format", Toast.LENGTH_LONG).show();
+        } else if (strPass.length() < 6|| strPass.length()>20) {
+            Toast.makeText(LoginActivity.this, "Password must be more than 6 characters and less than 20 characters", Toast.LENGTH_LONG).show();
+        }else {
+            auth.signInWithEmailAndPassword(strEmail, strPass)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user_current != null) {
+                                    // Lưu thông tin người dùng vào SharedPreferences
+                                    SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putString("userId", user_current.getUid());
+                                    editor.putString("email", user_current.getEmail());
+                                    editor.apply();
+                                    // Log.d("UserId", strEmail); // In giá trị userId vào Logcat
+                                    //  Log.d("AuthToken", strPass); // In giá trị authToken vào Logcat
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Intent intent = new Intent(LoginActivity.this, ListBook.class);
+                                    startActivity(intent);
+                                }
+
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(LoginActivity.this, "Check your email or password ",
+                                        Toast.LENGTH_SHORT).show();
+
                             }
-
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
                         }
-                    }
-                });
+                    });
+        }
+
     }
+
+
 }
