@@ -3,8 +3,8 @@ package com.example.myproject.models;
 import java.util.Date;
 
 public class Orders {
-   // private int OrderId;
-    private String UserId;
+
+    private String userId;
     private String phone;
     private String address;
     private Date orderDate;
@@ -13,9 +13,12 @@ public class Orders {
     private String status;
     private String payment;
 
-    public Orders( String UserId, String phone, String address, Date orderDate, String note, float orderTotalCost, String status, String payment) {
-       // OrderId = orderId;
-        this.UserId = UserId;
+
+
+
+    public Orders(String userId, String phone, String address, Date orderDate, String note, float orderTotalCost,
+                  String status, String payment) {
+        this.userId = userId;
         this.phone = phone;
         this.address = address;
         this.orderDate = orderDate;
@@ -25,20 +28,15 @@ public class Orders {
         this.payment = payment;
     }
 
-//    public int getOrderId() {
-//        return OrderId;
-//    }
-//
-//    public void setOrderId(int orderId) {
-//        OrderId = orderId;
-//    }
-//////hiiiii
-    public String getUserId() {
-        return UserId;
+    public Orders() {
     }
 
-    public void setUserId(String UserId) {
-        UserId = UserId;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPhone() {

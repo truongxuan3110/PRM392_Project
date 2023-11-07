@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         mNavigationView = findViewById(R.id.navigation_view);
+
         mNavigationView.setNavigationItemSelectedListener(this);
 
         tvEmail = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
@@ -60,31 +61,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-
-        if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_password) {
-
-        } else if (id == R.id.nav_signout) {
-
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-
+        Log.e("eeeee", id + "");
+        if (id == R.id.aview_ordered) {
+            Log.i("abc", "abbbbbb");
+            Intent intent = new Intent(MainActivity.this, OrderedHistoryActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_profile) {
+            Log.i("nav_profile", "nav_profile");
+        } else if (id == R.id.nav_password) {
+            Log.i("nav_password", "nav_password");
+        } else if (id == R.id.nav_signout) {
+            Log.i("nav_signout", "nav_signout");
+//            FirebaseAuth.getInstance().signOut();
+//            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//
+//            startActivity(intent);
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            mDrawerLayout.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     private void showUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

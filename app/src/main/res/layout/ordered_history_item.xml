@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        >
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:weightSum="8"
+            >
+
+            <TextView
+                android:id="@+id/ordered_history_date"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="1/1/2023"
+                android:textStyle="bold"
+                android:textColor="#074E87"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+<!--                <TextView-->
+<!--                    android:id="@+id/ordered_history_fullname"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="NDT"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:textStyle="bold" />-->
+
+                <TextView
+                    android:id="@+id/ordered_history_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0123123123"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ordered_history_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#031D20"
+                    android:text="HN"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ordered_history_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Note"
+                    android:textSize="15dp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/ordered_history_totalcost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="20.000đ"
+                    android:textColor="#F60707"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/ordered_history_orderedStatus"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="AA"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/line"
+        />
+</LinearLayout>

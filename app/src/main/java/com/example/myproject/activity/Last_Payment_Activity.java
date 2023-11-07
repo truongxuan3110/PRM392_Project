@@ -73,8 +73,7 @@ public class Last_Payment_Activity extends BaseActivity {
          // set up Spinner
         paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         List<String> paymentOptions = new ArrayList<>();
-        paymentOptions.add("Thẻ tín dụng");
-        paymentOptions.add("Thanh toán qua thẻ ngân hàng");
+        paymentOptions.add("Thanh toán qua MOMO");
         paymentOptions.add("Thanh toán khi nhận hàng");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -159,7 +158,7 @@ public class Last_Payment_Activity extends BaseActivity {
                                 startActivity(intent);
                             }
                         });
-                    } else if (paymentMethod.equals("Thanh toán qua thẻ ngân hàng")) {
+                    } else if (paymentMethod.equals("Thanh toán qua MOMO")) {
                         Intent intent = new Intent(Last_Payment_Activity.this, PaymentWithCreditCardActivity.class);
                         startActivity(intent);
                     }
