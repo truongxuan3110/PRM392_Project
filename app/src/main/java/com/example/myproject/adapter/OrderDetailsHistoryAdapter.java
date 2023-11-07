@@ -34,7 +34,9 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
     private Context context;
     private List<OrderDetail> odHistoryList;
 
-    private IOdHistoryListener odHistoryListener;
+    private IODHistoryListener iodHistoryListener;
+
+
 
     public OrderDetailsHistoryAdapter(Context context) {
         this.context = context;
@@ -45,8 +47,8 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
         notifyDataSetChanged();
     }
 
-    public void setOdHistoryListener(IOdHistoryListener odHistoryListener) {
-        this.odHistoryListener = odHistoryListener;
+    public void setIodHistoryListener(IODHistoryListener iodHistoryListener) {
+        this.iodHistoryListener = iodHistoryListener;
     }
 
     @NonNull
@@ -90,10 +92,10 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
                             holder.odhistory_repurchase_btn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    // Xử lý khi người dùng nhấn nút Repurchase
-                                    odHistoryListener.RepurchaseClicked(view, holder.getAdapterPosition());
+                                    iodHistoryListener.Repurchase(book.getBookId());
                                 }
                             });
+
                         } else {
                             Log.i("abc", "error onBindViewHolder odhistory");
                         }
@@ -136,7 +138,8 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
         }
     }
 
-    public interface IOdHistoryListener{
-        void RepurchaseClicked(View view, int position);
+    public interface IODHistoryListener{
+        void Repurchase(int bookId);
     }
+
 }
