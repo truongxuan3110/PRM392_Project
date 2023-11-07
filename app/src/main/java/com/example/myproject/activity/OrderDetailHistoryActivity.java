@@ -40,39 +40,42 @@ public class OrderDetailHistoryActivity extends AppCompatActivity implements Ord
         initView();
 
         Intent intent = getIntent();
-
         String orderId = intent.getStringExtra("orderId");
-        Log.d(" lllll ", orderId);
-        // Truy cập dữ liệu OrderDetails tương ứng với orderId
-            DatabaseReference orderDetailsRef = FirebaseDatabase.getInstance().getReference("orderDetails");
-            orderDetailsRef.orderByChild("orderId").equalTo(orderId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            OrderDetail orderDetail = snapshot.getValue(OrderDetail.class);
-                            orderDetailList.add(orderDetail);
-                        }
-                    } else {
-                        Log.d("null", "null ne");
+
+        DatabaseReference orderDetailsRef = FirebaseDatabase.getInstance().getReference("orderDetails");
+        orderDetailsRef.orderByChild("orderId").equalTo(orderId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                orderDetailList = new ArrayList<>(); // Khởi tạo danh sách trước khi thêm dữ liệu
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        OrderDetail orderDetail = snapshot.getValue(OrderDetail.class);
+                        orderDetailList.add(orderDetail);
                     }
-
+                    // Sau khi thêm dữ liệu vào danh sách, gán danh sách cho Adapter và cập nhật RecyclerView
+                    orderDetailsHistoryAdapter.setOrdersList(orderDetailList);
+                    rv_ordersDetailsHistory.setAdapter(orderDetailsHistoryAdapter);
+                } else {
+                    Log.d("null", "null ne");
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý khi có lỗi xảy ra
+            }
+        });
 
-                }
-            });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OrderDetailHistoryActivity.this);
+        rv_ordersDetailsHistory.setLayoutManager(linearLayoutManager);
 
 
-        orderDetailsHistoryAdapter = new OrderDetailsHistoryAdapter(OrderDetailHistoryActivity.this);
         orderDetailsHistoryAdapter.setOrdersList(orderDetailList);
         orderDetailsHistoryAdapter.setOdHistoryListener(this); // Setting the listener
         rv_ordersDetailsHistory.setAdapter(orderDetailsHistoryAdapter);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(OrderDetailHistoryActivity.this);
-        rv_ordersDetailsHistory.setLayoutManager(linearLayoutManager);
+
     }
 
     private void initView() {
