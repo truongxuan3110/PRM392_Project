@@ -76,8 +76,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
                     // Lấy ID của sản phẩm
                     int bookId = cartItem.getBook().getBookId();
-
-                    // Tham chiếu đến trường "unitInStock" tương ứng của sản phẩm
                     DatabaseReference unitInStockRef = FirebaseDatabase.getInstance().getReference().child("books").child(String.valueOf(bookId)).child("unitInStock");
 
                     unitInStockRef.addListenerForSingleValueEvent(new ValueEventListener() {

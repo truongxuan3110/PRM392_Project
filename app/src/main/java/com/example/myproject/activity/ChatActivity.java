@@ -210,13 +210,15 @@ public class ChatActivity extends AppCompatActivity {
                         int count = list.size();
                         list.clear(); // Xóa danh sách tin nhắn hiện tại
                         for (QueryDocumentSnapshot document : value) {
-                            ChatMessage chatMessage = new ChatMessage();
+                            if(document.getString(Utils.PARTICIPANTID).equals(user_current.getEmail())){
+                                ChatMessage chatMessage = new ChatMessage();
                                 chatMessage.sendid = document.getString(Utils.SENDID);
                                 chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
                                 chatMessage.mess = document.getString(Utils.MESS);
                                 chatMessage.dateObj = document.getDate(Utils.DATETIME);
                                 chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
                                 list.add(chatMessage);
+                            }
                         }
 
                         Collections.sort(list,(obj1,obj2)-> obj1.dateObj.compareTo(obj2.dateObj));

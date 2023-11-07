@@ -132,7 +132,7 @@ public class ChatAdminActivity extends AppCompatActivity {
         // Lấy tin nhắn ban đầu từ Firestore và thêm vào danh sách chatMessages
         // Thông qua Firebase Firestore Query
         db.collection(Utils.PATH_CHAT)
-//                .whereEqualTo(Utils.PARTICIPANTID, user_current.getEmail())
+//                .whereEqualTo(Utils.PARTICIPANTID, emailUser)
                 .orderBy("datetime", Query.Direction.ASCENDING) // Sắp xếp theo thời gian
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -144,13 +144,15 @@ public class ChatAdminActivity extends AppCompatActivity {
                         int count = list.size();
                         list.clear(); // Xóa danh sách tin nhắn hiện tại
                         for (QueryDocumentSnapshot document : value) {
-                            ChatMessage chatMessage = new ChatMessage();
-                            chatMessage.sendid = document.getString(Utils.SENDID);
-                            chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
-                            chatMessage.mess = document.getString(Utils.MESS);
-                            chatMessage.dateObj = document.getDate(Utils.DATETIME);
-                            chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
-                            list.add(chatMessage);
+                            if(document.getString(Utils.PARTICIPANTID).equals(emailUser)){
+                                ChatMessage chatMessage = new ChatMessage();
+                                chatMessage.sendid = document.getString(Utils.SENDID);
+                                chatMessage.receivedid = document.getString(Utils.RECEIVEDID);
+                                chatMessage.mess = document.getString(Utils.MESS);
+                                chatMessage.dateObj = document.getDate(Utils.DATETIME);
+                                chatMessage.datetime = format_date(document.getDate(Utils.DATETIME));
+                                list.add(chatMessage);
+                            }
                         }
 
                         Collections.sort(list,(obj1, obj2)-> obj1.dateObj.compareTo(obj2.dateObj));

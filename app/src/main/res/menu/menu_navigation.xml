@@ -14,10 +14,15 @@
 
         <item
 
-            android:title="@string/nav_location"
-            android:icon="@drawable/ic_lock"
+            android:title="Policy"
+            android:icon="@drawable/baseline_policy_24"
             />
 
+        <item
+
+            android:title="About us"
+            android:icon="@drawable/baseline_info_24"
+            />
 
 
     </group>
@@ -25,19 +30,18 @@
 
     <item
         android:title="@string/nav_title">
-
         <menu>
-            <item
-                android:id="@+id/nav_profile"
-                android:title="@string/nav_my_profile"
-                android:icon="@drawable/ic_person"
-                />
+<!--            <item-->
+<!--                android:id="@+id/nav_profile"-->
+<!--                android:title="@string/nav_my_profile"-->
+<!--                android:icon="@drawable/ic_person"-->
+<!--                />-->
 
-            <item
-                android:id="@+id/nav_password"
-                android:title="@string/nav_change_password"
-                android:icon="@drawable/ic_lock"
-                />
+<!--            <item-->
+<!--                android:id="@+id/nav_password"-->
+<!--                android:title="@string/nav_change_password"-->
+<!--                android:icon="@drawable/ic_lock"-->
+<!--                />-->
 
             <item
                 android:id="@+id/nav_signout"
@@ -46,6 +50,10 @@
                 />
         </menu>
     </item>
+
+
+
+
 
 
 

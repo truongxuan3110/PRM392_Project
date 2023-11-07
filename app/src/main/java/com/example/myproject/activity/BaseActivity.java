@@ -9,6 +9,7 @@ import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myproject.R;
+import com.example.myproject.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,8 +63,14 @@ public class BaseActivity extends AppCompatActivity {
         chatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BaseActivity.this, ChatActivity.class);
-                startActivity(intent);
+                if(user_current.getEmail().equals(Utils.EMAIL_AD)){
+                    Intent intent = new Intent(BaseActivity.this, UserChatActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(BaseActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
