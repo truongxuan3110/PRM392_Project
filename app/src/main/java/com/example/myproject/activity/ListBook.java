@@ -59,7 +59,7 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
     private DrawerLayout mDrawerLayout;
     FirebaseUser user_current = FirebaseAuth.getInstance().getCurrentUser();
     private Handler networkCheckHandler = new Handler();
-    private int networkCheckInterval = 10000; // Đợi 30 giây trước khi kiểm tra lại kết nối
+    private int networkCheckInterval = 30000; // Đợi 30 giây trước khi kiểm tra lại kết nối
 
     private Runnable networkCheckRunnable = new Runnable() {
         @Override
@@ -324,23 +324,18 @@ public class ListBook extends BaseActivity implements NavigationView.OnNavigatio
         if (id == R.id.aview_ordered) {
             Intent intent = new Intent(ListBook.this, OrderedHistoryActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_password) {
-
-        } else if (id == R.id.nav_signout) {
-            SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.remove("userId");
-            editor.remove("email");
-            editor.apply();
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(ListBook.this, LoginActivity.class);
-            startActivity(intent);
         }
-
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
+           else if (id == R.id.nav_signout) {
+                SharedPreferences prefs = getSharedPreferences("authen", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove("userId");
+                editor.remove("email");
+                editor.apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(ListBook.this, LoginActivity.class);
+                startActivity(intent);
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
 }
