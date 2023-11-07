@@ -109,10 +109,6 @@
         android:text="- Phone: 0974414699"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <Button
             android:id="@+id/callPhone"
@@ -124,15 +120,6 @@
             android:text="Call now"
             android:textSize="20sp" />
 
-        <Button
-            style="@style/button_call_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Homepage"
-            android:textSize="20sp" />
-
-    </LinearLayout>
 
 
     <TextView

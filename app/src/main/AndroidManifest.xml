@@ -25,11 +25,9 @@
         android:theme="@style/Theme.MyProject"
         tools:targetApi="33">
         <activity
-            android:name=".activity.OrderDetailHistoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.OrderedHistoryActivity"
-            android:exported="false" />
+            android:name=".activity.ForgotPasswordActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".activity.ChatAdminActivity"
             android:exported="false" />
@@ -100,6 +98,12 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
+      <activity
+            android:name=".activity.OrderDetailHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OrderedHistoryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
