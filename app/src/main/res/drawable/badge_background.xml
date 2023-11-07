@@ -1,13 +1,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!--    <item>-->
-<!--        <shape android:shape="oval">-->
-<!--            <solid android:color="#FF0000" /> &lt;!&ndash; Màu nền đỏ &ndash;&gt;-->
-<!--        </shape>-->
-<!--    </item>-->
-
-<!--    <item android:right="4dp" android:top="4dp" android:left="4dp" android:bottom="4dp">-->
-<!--        <shape android:shape="oval">-->
-<!--            <solid android:color="#FFFFFF" /> &lt;!&ndash; Màu số trắng &ndash;&gt;-->
-<!--        </shape>-->
-<!--    </item>-->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/red" /> <!-- Màu nền đỏ -->
+        </shape>
+    </item>
 </layer-list>
