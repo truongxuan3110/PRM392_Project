@@ -42,6 +42,7 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
 
     public void setOrdersList(List<OrderDetail> ordersList) {
         this.odHistoryList = ordersList;
+        notifyDataSetChanged();
     }
 
     public void setOdHistoryListener(IOdHistoryListener odHistoryListener) {
@@ -57,54 +58,49 @@ public class OrderDetailsHistoryAdapter extends RecyclerView.Adapter<OrderDetail
 
     @Override
     public void onBindViewHolder(@NonNull OrderDetailsHistoryViewHolder holder, int position) {
-
         if (odHistoryList == null || odHistoryList.isEmpty()) {
             return;
         }
-
         OrderDetail od = odHistoryList.get(position);
         if (od == null) return;
-
         int bookId = od.getBookID();
-        getBookByBookID(bookId);
-
-       if(book != null){
-            holder.odhistory_name.setText(book.getBookTitle());
-            holder.odhistory_unitprice.setText(book.getPrice());
-            holder.odhistory_quantity.setText(od.getQuantity()+"");
-            holder.odhistory_totalprice.setText(od.getTotal()+"");
-           Glide.with(context)
-                   .load(book.getImg())
-                   .into(holder.odhistory_img);
-
-            holder.odhistory_repurchase_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-       }else{
-           Log.i("abc", "error onBindViewHolder odhistory");
-       }
-
-
+        getBookByBookID(holder, bookId, od);
     }
 
-    Book book;
-    private void getBookByBookID(int bookId) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
 
+    private void getBookByBookID(@NonNull OrderDetailsHistoryViewHolder holder, int bookId, OrderDetail od) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
 
         databaseReference.orderByChild("bookId").equalTo(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    book = dataSnapshot.getValue(Book.class);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Book book = snapshot.getValue(Book.class);
+                        if (book != null) {
 
+                            holder.odhistory_name.setText(book.getBookTitle() + "");
+                            holder.odhistory_unitprice.setText(book.getPrice() + "");
+                            holder.odhistory_quantity.setText("X" + od.getQuantity());
+                            holder.odhistory_totalprice.setText(od.getTotal() + "");
+                            Glide.with(context)
+                                    .load(book.getImg())
+                                    .into(holder.odhistory_img);
+
+                            holder.odhistory_repurchase_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Xử lý khi người dùng nhấn nút Repurchase
+                                    odHistoryListener.RepurchaseClicked(view, holder.getAdapterPosition());
+                                }
+                            });
+                        } else {
+                            Log.i("abc", "error onBindViewHolder odhistory");
+                        }
+                    }
                 } else {
-
+                    Log.i("abc", "no data found for the query");
                 }
-
             }
 
             @Override
